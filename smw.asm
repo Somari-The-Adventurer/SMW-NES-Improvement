@@ -37,7 +37,7 @@ Controller1Input = $063D
 Controller2Input = $063E
 SecFrameCount = $0313
 ScratchRAM = $2E
-PlayerAnimPtr = $E5 ;I think this actually points to the animation SET, not the animation itself
+PlayerAnimPtr = $E5 ;This now points directly to animation instead of an animation set
 NMIJMPOpcode = $063A
 CameraXScreen = $51
 VerticalScrollFlag = $5B
@@ -123,16 +123,18 @@ PlayerFrameDur = $18
 ;TEMP DEFINES FOR DEV: these use the stack safe area just for convenience
 MetaXTemp = $33 ;$0100
 MetaYTemp = $34 ;$0101
-PlayerSprXOfs = $0102
-PlayerSprYOfs = $0103 ;these may already exist, see PlayerSprXPosOfs
+FREE = $0102
+PlayerPalette = $0103 ;these may already exist, see PlayerSprXPosOfs
 ScratchRAM1 = $0104
 PlayerVBob = $0105
+ 
+
 
 PlayerAnimation = $16
 PlayerAnimFrame = $17
 PlayerMovement = $19
 PlayerPrevDirection = $4F
-PlayerSpriteAttributes = $1A	;not sure what else to call this
+PlayerSpriteAttributes = $1A	;not sure what else to call this MOVE OFF OF ZP!!!
 PlayerFramePtr = $1B
 PlayerAction = $1D
 PlayerPrevAction = $1E
