@@ -6,7 +6,7 @@
 ;ExampleAnimName:
 ;	db $03 ;frame duration, negative duration indicates this is a loop point, incrementing the 1's column will add 1 to the return frame
 ;	dw ExampleFrameName ;mapping/frame name
-;	db $01 ;upper nybble indicates forced mirroring if negative, lower nybble is the vertical offset of the frame
+;	db $01 ;upper nybble indicates forced mirroring if $40, lower nybble is the vertical offset of the frame
 ;----------------------
 
 
@@ -160,7 +160,7 @@ MsmallSpin:
 	db $00 
 	db $01 ;F3
 	dw PlayerSmall_Stand ;mirrored
-	db $F0 
+	db $40 
 	db $01 ;F4
 	dw PlayerSmall_Front
 	db $00 
@@ -212,7 +212,7 @@ MsmallClimb:
 	db $00
 	db $06 ;F2
 	dw PlayerSmall_Climb1 ;Mirrored
-	db $F0
+	db $40
 	db $80 ;Loop F1
 MsmallWin:
 	db $0A ;F1
@@ -228,7 +228,7 @@ MsmallDie:
 	db $00
 	db $08 ;F3
 	dw PlayerSmall_Death1 ;mirrored
-	db $F0
+	db $40
 	db $81 ;loop F1
 	
 MsmallHold:
@@ -586,7 +586,7 @@ MbigSpin:
 	db $00
 	db $01
 	dw PlayerBig_Stand  ;mirrored
-	db $F0 
+	db $40 
 	db $80
 MbigTurn:
 	db $7E
@@ -636,7 +636,7 @@ MbigClimbMove:
 	db $00 
 	db $08
 	dw PlayerBig_Climb1 ;mirrored
-	db $F0
+	db $40
 	db $80
 MbigWin:
 	db $0A

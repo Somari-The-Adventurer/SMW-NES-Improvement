@@ -181,6 +181,9 @@ bra4_A119:
 ;some other animation routine functions need to be moved in here as well I think, there are some at the start bank
 ;check what else references this, should be able to point Yoshi anims directly to their table and remove this part
 ;note for later, Anim ID is doubled, this will break Yoshi ptr as it doesn't need variant animations, fine for now though
+
+;All code for this is new 
+
 MakePlayerAnimPtr: ;Select player animation and set
 	LDA #$24 	
 	STA M90_PRG3 ;Load the animation bank into the 3rd PRG slot
@@ -211,7 +214,6 @@ MakeYoshiAnimPtr:
 	LDA Yoshi_AnimTbl,Y
 	BNE StorePlayerAnimPtr ;always
 ;**********************************************************************************
-;All code in this sectioned off portion is new 
 DecPlayerFrameLength: ;START here, this routine handles frame changes WITHIN an animation, NOT animation changes 
 	DEC PlayerFrameDur 
 	BMI AdvNextPlayerFrame ;if frame duration underflown, advance to next frame
@@ -243,18 +245,21 @@ MakePlayerFramePtr:
 	STA PlayerFramePtr+1 ;store high byte	
 	INY  ;get vertical offset and forced mirroring byte 
 	LDA (PlayerAnimPtr), Y
-	TAX							;might rework this section, feels clunky
+	TAX
 	AND #%00001111 ;mask out mirroring bits 
 	STA PlayerVBob	
 	TXA 
-	AND #%11110000 
-	STA PlayerSpriteAttributes ;save mapping mirror state
+	AND #%11110000 ;mask out vertical offset
+	STA PlayerSpriteAttributes ;save mapping mirror state ;REASSIGN THIS BYTE
 SetPlayerSize: ;configure new sprite size for player
+;	LDY Player1YoshiStatus
+;	BNE ForceYoshiSize ;if the player has Yoshi, branch
 	LDY #$00 
 	LDA (PlayerFramePtr),Y
 	STA PlayerWidth
 	INY
 	LDA (PlayerFramePtr),Y
+	TAX ;move height for use as an index later
 	STA PlayerHeight
 	INY ;set player CHR bank
 	LDA (PlayerFramePtr),Y
@@ -265,46 +270,47 @@ SetPlayerSize: ;configure new sprite size for player
 	INY ;else set it to fire variant
 SkipFireCHR: 
 	STY SpriteBank1	;store the loaded sprite bank
-	
-CalcPlayerVOfs: ;					NEED TO UPDATE OTHER CODE AS IT'S LIKELY DUPLICATE
-;	LDY PlayerHeight ;use player height to select V offset
-;	LDA PlayerSpriteVOffset,Y
-;	CLC 
-;	ADC PlayerSprYPos
-;	STA PlayerSprYPosOfs
-;	SEC
-;	SBC PlayerVBob ;Subtract mapping offset from V offset
-;	STA PlayerVBob
+CalcPlayerVOfs:
+	LDA PlayerSpriteVOffset,X ;load vertical sprite offset based on player height
+	SEC
+	SBC PlayerVBob ;Subtract mapping offset from size offset
+	STA PlayerVBob ;store the result
 	RTS ;end 
+;ForceYoshiSize:
+;	LDY #$00
+;	LDX #$02
+;	STX PlayerWidth
+;	STX PlayerHeight
+;	LDA (PlayerFramePtr),Y
+;	STA SpriteBank2
+;	BNE CalcPlayerVOfs
 ;**********************************************************************************
 ;**********************************************************************************	
-;Remake necessary functions for every frame here
-ForcePlayerMirror:
-	LDA PlayerMovement
-	AND #$F0	;get the direction the player is facing
-	EOR #$40	;reverse it
-	STA PlayerSpriteMirror
-	JMP StoreMarioMirror
+;This runs every frame, so keep what happens here to the essentials
+;ForcePlayerMirror: ;since this is rarely used we can afford it to be a slower JMP
+;	EOR #$40	;reverse mirroring direction
+;	JMP StorePlayerMirror 
 PlayerLeftSprXOffset:
 	CLC 
 	ADC SpriteHOffsetTbl,Y ;add offset to sprite x position
 	JMP StorePlayerSprXOfs
 ConfigPlayerSpr: ;START HERE (replaces LoadPlayerSprite)
+SetPlayerMirror:
 	LDA PlayerMovement
 	AND #$F0 ;get the direction the player is facing
+	EOR PlayerSpriteAttributes
+;	LDX PlayerSpriteAttributes
+;	BMI ForcePlayerMirror ;if sprite attributes are negative, force sprite to be mirrored
+StorePlayerMirror:
 	STA PlayerSpriteMirror ;set it to player sprite mirroring
-SetPlayerMirror: ;feels clunky, consider rework of this function
-	LDA PlayerSpriteAttributes ;used for temp compatibility with cape code
-	BMI ForcePlayerMirror ;if value is negative, force sprite to be mirrored	
-StoreMarioMirror:
-	LDA PlayerSpriteMirror
-;	EOR PlayerPalette ;apply mirroring 
+	EOR PlayerPalette ;apply mirroring to palette var (also we want the sprite layer priority to be worked into this routine)
+	EOR $06E0 ;Set player BG priorty
 	STA ScratchRAM1 ;save composite result to zero page for faster access (Note, this needs to be moved to ZP later)	
 GetPlayerSprXOfs:
 	LDY PlayerWidth ;use player width to select X offset
 	LDA PlayerSprXPos;PlayerXPos 
 	LDX PlayerSpriteMirror
-	BNE PlayerLeftSprXOffset: ;if sprites are mirrored, branch
+	BNE PlayerLeftSprXOffset ;if sprites are mirrored, branch
 	SEC 
 	SBC SpriteHOffsetRightTbl,Y ;Subtract offset from sprite x position
 StorePlayerSprXOfs:	
@@ -312,26 +318,23 @@ StorePlayerSprXOfs:
 	
 ;get Vertical Offset
 loc4_A218:
-	LDX #$00 ;set X to #$00
-	LDY PlayerHeight ;Put player height into Y
-	LDA PlayerSpriteVOffset,Y ;Load players vertical offset based on sprite height 
+;	LDX #$00 ;set X to #$00
+	LDA PlayerVBob
 	CLC 
-	ADC PlayerSprYPos ;add player sprite Y pos to the V offset 
-	SEC 
-	SBC PlayerVBob ;DEBUG ;subtract the bobbing V offset 
+	ADC PlayerSprYPos
 	STA PlayerSprYPosOfs ;store it as the Y offset for the sprite
 	
-	BPL bra4_A223 ;branch if offset is positive (only happens if sprite height is 00, unsure when this would ever occur though)
-	LDX #$FF ;else if offset negative, set X to #$FF
+;	BPL bra4_A223 ;branch if offset is positive (only happens if sprite height is 00, unsure when this would ever occur though)
+;	LDX #$FF ;else if offset negative, set X to #$FF
 	
-bra4_A223: ;offset player vertically
+;bra4_A223: ;offset player vertically
 ;	CLC
 ;	ADC PlayerSprYPos ;add player vertical position to loaded vertical offset
 ;	STA PlayerSprYPosOfs ;set it as sprite Y offset 
-	BCC bra4_A22B ;if carry clear (result less than 255) then branch to end of routine (leaves X untouched)
-	INX ;increment X (Result: 00 or 01) (if X is #$FF this will underflow to be #$00) 
-bra4_A22B:
-	STX $22 ;Unknown purpose (possibly something to do with if the players V offset puts them off screen)
+;	BCC bra4_A22B ;if carry clear (result less than 255) then branch to end of routine (leaves X untouched)
+;	INX ;increment X (Result: 00 or 01) (if X is #$FF this will underflow to be #$00) 
+;bra4_A22B:
+;	STX $22 ;Unknown purpose (possibly something to do with if the players V offset puts them off screen)
 	RTS ;end
 	
 PlayerSpriteVOffset: ;This table adjusts the sprite offset based on the height of the player, listed next to the offsets are the respective heights
@@ -413,21 +416,33 @@ bra4_A29E:
 ;-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=
 ;End of bubble spawning
 ;-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=	
-	
-bra4_A2AC:
+;DEBUG, clean this up, this is a very quickly made implementation
+bra4_A2AC: ;FLASHING ANIMATION WHEN INVICINBLE
 	LDA #$02
 	LDY InvincibilityTimer
-	BEQ bra4_A2C2 ;branch if star/invincibility timer is cleared
+	BEQ ResetPalette ;branch if star/invincibility timer is cleared
 	CPY #$D0 ;if timer is below #$D0,
 	BCC bra4_A2BD ;branch
 	CPY #$F6 ;if timer goes over #$F6,
-	BCS bra4_A2C2 ;branch
+	BCS ResetPalette ;branch
 	LDA #$01
 bra4_A2BD:
 	AND FrameCount	
 	BEQ bra4_A2C2
+	LDX PlayerPalette
+	INX
+	LDA Tbl,X
+	BMI ResetPalette
+	STA PlayerPalette
+	JMP bra4_A2C2
 bra4_A2C1_RTS:
 	RTS
+Tbl:
+	db $00,$01,$02,$03,$FF
+	
+ResetPalette:	
+	LDA #$00
+	STA PlayerPalette
 ;-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=
 ;MARIO SPRITE LOADERS (Main player sprites and riding Yoshi)
 ;-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=	
@@ -625,7 +640,6 @@ SpriteHOffsetRightTbl: ;Horizontal offsets for sprites
 ;	.db $30 ;07	
 ;-=-=-=-=-=-=-=-=-=-=-=-=-=-==-=-=-==-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-===-=-=-=-==-=-=-=-=-=-=--
 ;MAIN PLAYER SPRITE BUILDER
-;Please excuse the poor coding on the first part here, this is very WIP and full of quick fixes
 ;-=-=-=-=-=-=-=-=-=-=-=-=-=-==-=-=-==-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-===-=-=-=-==-=-=-=-=-=-=--
 PlayerSpriteBuilder:
 	LDA #$24
