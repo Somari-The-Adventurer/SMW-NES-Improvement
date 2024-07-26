@@ -1,7 +1,7 @@
 Powerup_Tri:
 	.byte SongSpeed, 1
 	.byte Transpose, $0C
-	.byte PitchSet, $39
+	.byte PitchSet, $00
 	.byte VolSet, $7f
 	.byte NLen+1
 	.byte Transpose, $04

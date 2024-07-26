@@ -19,16 +19,16 @@ tbl10_8000:
 	dw ofs_Vol10
 	dw ofs_Vol11
 	dw ofs_Duty12 ; 12.5%-25% x1
-	dw ofs_NA
+	dw ofs_Vol13
 	dw ofs_Vol14
 	dw ofs_Vol15
 	dw ofs_Pitch16
 	dw ofs_Duty17 ; 50%-25% x1
-	dw ofs_Vol28 ; castle flat dynamics
+	dw ofs_Vol18 ; castle flat dynamics
 	dw ofs_Vol19
 	dw ofs_Vol1A
 	dw ofs_Vol1B
-	dw ofs_Vol29
+	dw ofs_Vol1C
 	dw ofs_Vol1D
 	dw ofs_Vol1E
 	dw ofs_Vol1F
@@ -41,39 +41,34 @@ tbl10_8000:
 	dw ofs_Vol26
 	dw ofs_Vol27
 	dw ofs_Vol28
-	dw ofs_Vol29
+	dw ofs_NA
 	dw ofs_Pitch2A
-	dw ofs_Vol2B
+	dw ofs_Pitch2B
 	dw ofs_Vol2C
 	dw ofs_Duty2D ; 210121 x1
 	dw ofs_Vol2E
 	dw ofs_Pitch2F
 	dw ofs_Vol30
-	dw ofs_NA
-	dw ofs_NA
+	dw ofs_Vol31
+	dw ofs_Pitch32
 	dw ofs_Vol33
 	dw ofs_Duty34 ; 3|2101 x1
-	dw ofs_NA
-	dw ofs_NA
-	dw ofs_NA
+	dw ofs_Pitch35
+	dw ofs_Pitch36
+	dw ofs_Vol37
 	dw ofs_Duty38 ; 50%
-	dw ofs_Pitch39
+	dw ofs_NA
 	dw ofs_Pitch3A
 	dw ofs_Vol3B
 	dw ofs_Duty3C ; 75%
 	dw ofs_Duty3D ; 12.5%
 	dw ofs_Vol3E
-	dw ofs_Pitch3F
+	dw ofs_NA
 	dw ofs_Vol40
 	dw ofs_Vol41
-	dw ofs_NA
-	dw ofs_NA
-	dw ofs_NA
-	dw ofs_NA
-	dw ofs_Vol46
-	dw ofs_NA
-	dw ofs_NA
-	dw ofs_NA
+	dw ofs_Vol42
+	dw ofs_Vol43
+	dw ofs_Vol44
 	dw ofs_NA
 	dw ofs_NA
 	dw ofs_NA
@@ -81,7 +76,12 @@ tbl10_8000:
 	dw ofs_NA
 	dw ofs_NA
 	dw ofs_NA
-	dw ofs_Pitch51
+	dw ofs_NA
+	dw ofs_NA
+	dw ofs_NA
+	dw ofs_NA
+	dw ofs_NA
+	dw ofs_NA
 	dw ofs_Vol52
 	dw ofs_Vol53
 	dw ofs_NA
@@ -96,9 +96,9 @@ tbl10_8000:
 	dw ofs_NA
 	dw ofs_NA
 	dw ofs_NA
-	dw ofs_Duty60 ; 75%-12.5% x5
+	dw ofs_NA ; 75%-12.5% x5
 	dw ofs_Vol61
-	dw ofs_Pitch62
+	dw ofs_NA
 	dw ofs_Pitch63
 	dw ofs_Pitch64
 	dw ofs_NA
@@ -108,14 +108,14 @@ tbl10_8000:
 	dw ofs_NA
 	dw ofs_NA
 	dw ofs_NA
-	dw ofs_NA
-	dw ofs_NA
-	dw ofs_NA
-	dw ofs_NA
-	dw ofs_NA
-	dw ofs_NA
-	dw ofs_NA
-	dw ofs_NA
+	dw ofs_Pitch6C
+	dw ofs_Vol6D
+	dw ofs_Vol6E
+	dw ofs_Pitch6F
+	dw ofs_Vol70
+	dw ofs_Vol71
+	dw ofs_Vol72
+	dw ofs_Vol73
 	dw ofs_Pitch74
 	dw ofs_Vol75
 	dw ofs_Vol76
@@ -138,6 +138,7 @@ bra10_85C4:
 	CMP MusicBackup ;Check if the BGM has changed
 	BEQ bra10_85D5_RTS ;If not, stop
 IFNDEF RGME_PATCH
+	JSR InitNoteLengthAddend
 	LDA MusicRegister ;If it has, back up the song ID
 ELSE
 	LDA #mus_Silence
@@ -177,19 +178,19 @@ bra10_85F8:
 	LDX #$04
 bra10_8602:
 	DEX
-	STA Pulse1VolumeDelay,X
+	STA MusicVolumeDelay,X
 	STA SFXVolumeDelay,X
 	BNE bra10_8602
 	LDX #$04
 bra10_860D:
 	DEX
-	STA Pulse1PitchDelay,X
+	STA MusicPitchDelay,X
 	STA SFXPitchDelay,X
 	BNE bra10_860D
 	LDX #$02
 bra10_8618:
 	DEX
-	STA Pulse1DutyDelay,X
+	STA MusicDutyDelay,X
 	STA SFXDutyDelay,X
 	BNE bra10_8618
 	LDX #$08
@@ -209,7 +210,7 @@ jmp_58_862A:
 	LDA #$00
 PauseNotDone:
 	STA APUStatus
-	LDA #%00001111
+	LDA #%00000111
 	STA APUStatus ;Disable noise channel
 	JSR UpdateChannels
 	JSR sub10_86E8
@@ -375,25 +376,25 @@ bra10_875C:
 	STA NumSongTicks,X
 	LDX CurrentTrackOffset
 	LDA #$00
-	STA Pulse1VolumeEnv,X
+	STA MusicVolumeEnv,X
 	LDA #$FF
-	STA Pulse1VolumeDelay,X
+	STA MusicVolumeDelay,X
 	CPY #$04
 	BPL bra10_879C
 	LDA #$00
-	STA Pulse1PitchSetting,X
+	STA MusicPitchSetting,X
 	LDA #$FF
-	STA Pulse1PitchDelay,X
+	STA MusicPitchDelay,X
 	CPY #$03
 	BPL bra10_879C
 	LDA #$00
-	STA Pulse1Transpose,X
+	STA MusicTranspose,X
 	CPY #$02
 	BPL bra10_879C
 	LDA #$00
-	STA Pulse1Duty,X
+	STA MusicDuty,X
 	LDA #$FF
-	STA Pulse1DutyDelay,X
+	STA MusicDutyDelay,X
 bra10_879C:
 	PLA
 	TAY
@@ -410,7 +411,7 @@ sub10_87A1:
 	JSR GaugeMusicByte
 	LDX CurrentTrackPointerOffset
 	LDY CurrentTrackOffset
-	LDA NoteLengths,Y
+	LDA MusicNoteLengths,Y
 	STA NumSongTicks,X
 bra10_87C5:
 	DEC NumSongTicks,X
@@ -442,59 +443,49 @@ GaugeMusicByte:
 GaugeNoteLength:
 	AND #$7F
 	BEQ InvalidNoteLength
+	LDX CurrentTrackID
+	CPX #$05
+	BCS @SFX ; skip addition if sound effect
+	ADC NoteLengthAddend,X
+@SFX:
 	LDX CurrentTrackOffset
-	STA NoteLengths,X
+	STA MusicNoteLengths,X
 InvalidNoteLength:
-	JSR sub10_8E20
+	JSR AdvenaceAPUPC
 	JMP GaugeMusicByte
-musDummy:
-	JMP sub10_8E20
-	LDX $060A
-	BEQ bra10_881F_RTS
-	LDX #$FF
-bra10_8816:
-	INX
-	CMP tbl10_8820,X
-	BNE bra10_8816
-	LDA tbl10_8829,X
-bra10_881F_RTS:
-	RTS
-tbl10_8820:
-	db $03
-	db $00
-	db $06
-	db $09
-	db $0C
-	db $12
-	db $18
-	db $24
-	db $30
-tbl10_8829:
-	db $02
-	db $03
-	db $04
-	db $06
-	db $08
-	db $0C
-	db $10
-	db $18
-	db $20
+musNoteLengthAddend:
+	LDX CurrentTrackPointerOffset
+	LDA MusicPointer,X
+	STA SoundPointer
+	LDA MusicPointer+1,X
+	STA SoundPointer+1
+	LDA CurrentTrackID
+	CMP #$05
+	BCS @quit ; ignore if on SFX channel
+	TAX
+	LDY #0
+	LDA (SoundPointer),Y
+	STA NoteLengthAddend,X
+@quit:
+	JSR AdvenaceAPUPC
+	JMP GaugeMusicByte
+
 GaugePitch:
-	BNE bra10_883B
-	JSR sub10_8E20
-	JMP loc10_8A0A
-bra10_883B:
+	BNE NotARest
+	JSR AdvenaceAPUPC
+	JMP EngageRest
+NotARest:
 	PHA
 	LDA CurrentTrackID
 	AND #$0F
 	TAX
 	PLA
 	CPX #$03
-	BEQ bra10_8866
+	BEQ NoisePitch
 	CPX #$04
-	BNE bra10_884B
+	BNE PSGPitch
 	LDX CurrentTrackPointerOffset
-	STA Pulse1Pitch, X
+	STA MusicPitch, X
 	CPX #SOUND_RAM_LENGTH
 	BCS SetDPCMIndex
 	LDA SFXPointer, X
@@ -502,24 +493,24 @@ bra10_883B:
 	BNE SkipDPCMSet
 SetDPCMIndex:
 	LDA #0
-	STA Pulse1Pitch+1,X
+	STA MusicPitch+1,X
 	LDA #1
 	STA DPCMFlag
 SkipDPCMSet:
 	JMP loc10_8878
-bra10_884B:
+PSGPitch:
 	LDX CurrentTrackOffset
 	CLC
-	ADC Pulse1Transpose,X
+	ADC MusicTranspose,X
 	ASL
 	TAY
 	LDX CurrentTrackPointerOffset
 	LDA NotePitchTable,Y
-	STA Pulse1Pitch,X
+	STA MusicPitch,X
 	LDA NotePitchTable+1,Y
-	STA Pulse1Pitch+1,X
+	STA MusicPitch+1,X
 	JMP loc10_8878
-bra10_8866:
+NoisePitch:
 	TAX
 	AND #$10
 	BEQ bra10_8871
@@ -530,15 +521,15 @@ bra10_8866:
 bra10_8871:
 	TXA
 	LDX CurrentTrackPointerOffset
-	STA Pulse1Pitch,X
+	STA MusicPitch,X
 loc10_8878:
 	JSR sub10_8A65
-	JMP sub10_8E20
+	JMP AdvenaceAPUPC
 GaugeMusicCommand:
 	AND #$0F
 	ASL
 	TAY
-	JSR sub10_8E20
+	JSR AdvenaceAPUPC
 	TYA
 	TAX
 	LDA MusicCommandTable,X
@@ -547,6 +538,9 @@ GaugeMusicCommand:
 	STA SoundPointer+1
 	JMP (SoundPointer)
 MusicCommandTable:
+; notes:
+; $FD sets significant digits of MusicCommandTable as note length
+; $FE simply loads a parameter without a routine to return to
 	dw musCall
 	dw musRet
 	dw musLoop
@@ -554,12 +548,12 @@ MusicCommandTable:
 	dw musJump
 	dw musSpeed
 	dw musTransposition
-	dw musSweep
+	dw musSweep ; new
 	dw musVolumeEnv
 	dw musDutyCycle
 	dw musModulation
 	dw musVerboseLoop
-	dw musDummy
+	dw musNoteLengthAddend ; new
 	dw GaugeNoteLength
 	dw GaugeMusicByte
 	dw musEnd
@@ -577,7 +571,7 @@ musSweep:
 	LDY #$00
 	LDA (SoundPointer),Y
 	STA Sq1Sweep, X ; update sweep
-	JSR sub10_8E20
+	JSR AdvenaceAPUPC
 	JMP GaugeMusicByte
 musCall:
 	LDX CurrentTrackPointerOffset
@@ -609,7 +603,7 @@ musLoop:
 	LDY #$00
 	LDA (SoundPointer),Y
 	STA SongLoopCounter,X
-	JSR sub10_8E20
+	JSR AdvenaceAPUPC
 	LDX CurrentTrackPointerOffset
 	LDA MusicPointer,X
 	STA SongLoopPointer,X
@@ -660,7 +654,7 @@ musSpeed:
 	LDY #SOUND_RAM_LENGTH
 bra10_8971:
 	STA MusicSpeed,Y ;Set Music/SFX speed
-	JSR sub10_8E20
+	JSR AdvenaceAPUPC
 	JMP GaugeMusicByte
 musTransposition:
 	LDA CurrentTrackID
@@ -676,9 +670,9 @@ musTransposition:
 	LDY #$00
 	LDA (SoundPointer),Y
 	LDX CurrentTrackOffset
-	STA Pulse1Transpose,X
+	STA MusicTranspose,X
 bra10_899B:
-	JSR sub10_8E20
+	JSR AdvenaceAPUPC
 	JMP GaugeMusicByte
 musVolumeEnv:
 	LDA CurrentTrackID
@@ -686,11 +680,11 @@ musVolumeEnv:
 	TAX
 	CPX #$04
 	BMI bra10_89B1
-	JSR sub10_8E20
+	JSR AdvenaceAPUPC
 	JMP GaugeMusicByte
 bra10_89B1:
 	JSR sub10_8B0D
-	STA Pulse1VolumeEnv,X
+	STA MusicVolumeEnv,X
 	JMP GaugeMusicByte
 musDutyCycle:
 	LDA CurrentTrackID
@@ -698,11 +692,11 @@ musDutyCycle:
 	TAX
 	CPX #$02
 	BMI bra10_89CA
-	JSR sub10_8E20
+	JSR AdvenaceAPUPC
 	JMP GaugeMusicByte
 bra10_89CA:
 	JSR sub10_8B0D
-	STA Pulse1Duty,X
+	STA MusicDuty,X
 	JMP GaugeMusicByte
 musModulation:
 	LDA CurrentTrackID
@@ -710,11 +704,11 @@ musModulation:
 	TAX
 	CPX #$04
 	BMI bra10_89E3
-	JSR sub10_8E20
+	JSR AdvenaceAPUPC
 	JMP GaugeMusicByte
 bra10_89E3:
 	JSR sub10_8B0D
-	STA Pulse1PitchSetting,X
+	STA MusicPitchSetting,X
 	JMP GaugeMusicByte
 musEnd:
 	LDA CurrentTrackID
@@ -736,9 +730,9 @@ musEnd:
 	ADC #SOUND_RAM_LENGTH
 	TAY
 	LDA #$FF
-	STA Pulse1FinalPitch+1,X
-	STA Pulse1FinalPitch+1,Y
-loc10_8A0A:
+	STA MusicFinalPitch+1,X
+	STA MusicFinalPitch+1,Y
+EngageRest:
 	LDY CurrentTrackOffset
 	LDA CurrentTrackID
 	AND #$0F
@@ -746,11 +740,11 @@ loc10_8A0A:
 	LDA #$FF
 	CPX #$04
 	BPL bra10_8A26_RTS
-	STA Pulse1VolumeDelay,Y
-	STA Pulse1PitchDelay,Y
+	STA MusicVolumeDelay,Y
+	STA MusicPitchDelay,Y
 	CPX #$02
 	BPL bra10_8A26_RTS
-	STA Pulse1DutyDelay,Y
+	STA MusicDutyDelay,Y
 bra10_8A26_RTS:
 	RTS
 musVerboseLoop:
@@ -759,7 +753,7 @@ musVerboseLoop:
 	STA SoundPointer
 	LDA MusicPointer+1,X
 	STA SoundPointer+1
-	JSR sub10_8E20
+	JSR AdvenaceAPUPC
 	LDX CurrentTrackOffset
 	LDA SongLoopCounter,X
 	BNE bra10_8A46
@@ -782,9 +776,9 @@ bra10_8A62:
 	JMP musJump
 sub10_8A65:
 	LDX CurrentTrackPointerOffset
-	LDA Pulse1FinalPitch+1,X
+	LDA MusicFinalPitch+1,X
 	ORA #$80
-	STA Pulse1FinalPitch+1,X
+	STA MusicFinalPitch+1,X
 	JSR sub10_8A7A
 	JSR sub10_8AAB
 	JMP sub10_8ADC
@@ -800,19 +794,19 @@ sub10_8A7A:
 bra10_8A85:
 	LDX CurrentTrackOffset
 	LDY CurrentTrackPointerOffset
-	LDA Pulse1VolumeEnv,X
+	LDA MusicVolumeEnv,X
 	ASL
 	TAX
 	LDA tbl10_8000,X
-	STA Pulse1VolumePointer,Y
+	STA MusicVolumePointer,Y
 	STA SoundPointer
 	LDA tbl10_8000+1,X
-	STA Pulse1VolumePointer+1,Y
+	STA MusicVolumePointer+1,Y
 	STA SoundPointer+1
 	LDX CurrentTrackOffset
 	LDY #$00
 	LDA (SoundPointer),Y
-	STA Pulse1VolumeDelay,X
+	STA MusicVolumeDelay,X
 	RTS
 
 sub10_8AAB:
@@ -825,19 +819,19 @@ sub10_8AAB:
 bra10_8AB6:
 	LDX CurrentTrackOffset
 	LDY CurrentTrackPointerOffset
-	LDA Pulse1Duty,X
+	LDA MusicDuty,X
 	ASL
 	TAX
 	LDA tbl10_8000,X
-	STA Pulse1DutyPointer,Y
+	STA MusicDutyPointer,Y
 	STA SoundPointer
 	LDA tbl10_8000+1,X
-	STA Pulse1DutyPointer+1,Y
+	STA MusicDutyPointer+1,Y
 	STA SoundPointer+1
 	LDX CurrentTrackOffset
 	LDY #$00
 	LDA (SoundPointer),Y
-	STA Pulse1DutyDelay,X
+	STA MusicDutyDelay,X
 	RTS
 sub10_8ADC:
 	LDA CurrentTrackID
@@ -849,19 +843,19 @@ sub10_8ADC:
 bra10_8AE7:
 	LDX CurrentTrackOffset
 	LDY CurrentTrackPointerOffset
-	LDA Pulse1PitchSetting,X
+	LDA MusicPitchSetting,X
 	ASL
 	TAX
 	LDA tbl10_8000,X
-	STA Pulse1PitchPointer,Y
+	STA MusicPitchPointer,Y
 	STA SoundPointer
 	LDA tbl10_8000+1,X
-	STA Pulse1PitchPointer+1,Y
+	STA MusicPitchPointer+1,Y
 	STA SoundPointer+1
 	LDX CurrentTrackOffset
 	LDY #$00
 	LDA (SoundPointer),Y
-	STA Pulse1PitchDelay,X
+	STA MusicPitchDelay,X
 	RTS
 
 sub10_8B0D:
@@ -871,7 +865,7 @@ sub10_8B0D:
 	LDA MusicPointer+1,X
 	STA SoundPointer+1
 	
-	JSR sub10_8E20 ;Move to next byte
+	JSR AdvenaceAPUPC ;Move to next byte
 	LDY #$00
 	LDA (SoundPointer),Y
 	LDX CurrentTrackOffset
@@ -891,30 +885,30 @@ sub10_8B2F:
 
 loc10_8B39:
 	LDX CurrentTrackOffset
-	LDA Pulse1VolumeDelay,X
+	LDA MusicVolumeDelay,X
 	TAY
 	CPY #$FF
 	BEQ bra10_8BA1_RTS
 	LDX CurrentTrackOffset
-	LDA Pulse1VolumeDelay,X
+	LDA MusicVolumeDelay,X
 	BNE bra10_8B9E
 	
 	;Move to next RLE tag
 	LDX CurrentTrackPointerOffset
 	LDA #$02
 	CLC
-	ADC Pulse1VolumePointer,X
-	STA Pulse1VolumePointer,X
+	ADC MusicVolumePointer,X
+	STA MusicVolumePointer,X
 	STA SoundPointer
 	LDA #$00
-	ADC Pulse1VolumePointer+1,X
-	STA Pulse1VolumePointer+1,X
+	ADC MusicVolumePointer+1,X
+	STA MusicVolumePointer+1,X
 	STA SoundPointer+1
 	
 	LDX CurrentTrackOffset
 	LDY #$00
 	LDA (SoundPointer),Y
-	STA Pulse1VolumeDelay,X
+	STA MusicVolumeDelay,X
 	TAY
 	CPY #$FF
 	BNE loc10_8B39
@@ -924,22 +918,22 @@ loc10_8B39:
 	AND #$FE
 	BPL bra10_8B91
 	CLC
-	ADC Pulse1VolumePointer,X
-	STA Pulse1VolumePointer,X
+	ADC MusicVolumePointer,X
+	STA MusicVolumePointer,X
 	STA SoundPointer
 	BCS bra10_8B8C
-	DEC Pulse1VolumePointer+1,X
+	DEC MusicVolumePointer+1,X
 bra10_8B8C:
-	LDA Pulse1VolumePointer+1,X
+	LDA MusicVolumePointer+1,X
 	STA SoundPointer+1
 bra10_8B91:
 	LDX CurrentTrackOffset
 	LDY #$00
 	LDA (SoundPointer),Y
-	STA Pulse1VolumeDelay,X
+	STA MusicVolumeDelay,X
 	JMP loc10_8B39
 bra10_8B9E:
-	DEC Pulse1VolumeDelay,X
+	DEC MusicVolumeDelay,X
 bra10_8BA1_RTS:
 	RTS
 
@@ -952,27 +946,27 @@ sub10_8BA2:
 
 loc10_8BAC:
 	LDX CurrentTrackOffset
-	LDA Pulse1DutyDelay,X
+	LDA MusicDutyDelay,X
 	TAY
 	CPY #$FF
 	BEQ bra10_8C14_RTS
 	LDX CurrentTrackOffset
-	LDA Pulse1DutyDelay,X
+	LDA MusicDutyDelay,X
 	BNE bra10_8C11
 	LDX CurrentTrackPointerOffset
 	LDA #$02
 	CLC
-	ADC Pulse1DutyPointer,X
-	STA Pulse1DutyPointer,X
+	ADC MusicDutyPointer,X
+	STA MusicDutyPointer,X
 	STA SoundPointer
 	LDA #$00
-	ADC Pulse1DutyPointer+1,X
-	STA Pulse1DutyPointer+1,X
+	ADC MusicDutyPointer+1,X
+	STA MusicDutyPointer+1,X
 	STA SoundPointer+1
 	LDX CurrentTrackOffset
 	LDY #$00
 	LDA (SoundPointer),Y
-	STA Pulse1DutyDelay,X
+	STA MusicDutyDelay,X
 	TAY
 	CPY #$FF
 	BNE loc10_8BAC
@@ -982,22 +976,22 @@ loc10_8BAC:
 	AND #$FE
 	BPL bra10_8C04
 	CLC
-	ADC Pulse1DutyPointer,X
-	STA Pulse1DutyPointer,X
+	ADC MusicDutyPointer,X
+	STA MusicDutyPointer,X
 	STA SoundPointer
 	BCS bra10_8BFF
-	DEC Pulse1DutyPointer+1,X
+	DEC MusicDutyPointer+1,X
 bra10_8BFF:
-	LDA Pulse1DutyPointer+1,X
+	LDA MusicDutyPointer+1,X
 	STA SoundPointer+1
 bra10_8C04:
 	LDX CurrentTrackOffset
 	LDY #$00
 	LDA (SoundPointer),Y
-	STA Pulse1DutyDelay,X
+	STA MusicDutyDelay,X
 	JMP loc10_8BAC
 bra10_8C11:
-	DEC Pulse1DutyDelay,X
+	DEC MusicDutyDelay,X
 bra10_8C14_RTS:
 	RTS
 sub10_8C15:
@@ -1009,26 +1003,26 @@ sub10_8C15:
 bra10_8C1F:
 loc10_8C1F:
 	LDX CurrentTrackOffset
-	LDA Pulse1PitchDelay,X
+	LDA MusicPitchDelay,X
 	TAY
 	CPY #$FF
 	BEQ bra10_8C84_RTS
-	LDA Pulse1PitchDelay,X
+	LDA MusicPitchDelay,X
 	BNE bra10_8C81
 	LDX CurrentTrackPointerOffset
 	LDA #$02
 	CLC
-	ADC Pulse1PitchPointer,X
-	STA Pulse1PitchPointer,X
+	ADC MusicPitchPointer,X
+	STA MusicPitchPointer,X
 	STA SoundPointer
 	LDA #$00
-	ADC Pulse1PitchPointer+1,X
-	STA Pulse1PitchPointer+1,X
+	ADC MusicPitchPointer+1,X
+	STA MusicPitchPointer+1,X
 	STA SoundPointer+1
 	LDX CurrentTrackOffset
 	LDY #$00
 	LDA (SoundPointer),Y
-	STA Pulse1PitchDelay,X
+	STA MusicPitchDelay,X
 	TAY
 	CPY #$FF
 	BNE bra10_8C1F
@@ -1038,22 +1032,22 @@ loc10_8C1F:
 	AND #$FE
 	BPL bra10_8C74
 	CLC
-	ADC Pulse1PitchPointer,X
-	STA Pulse1PitchPointer,X
+	ADC MusicPitchPointer,X
+	STA MusicPitchPointer,X
 	STA SoundPointer
 	BCS bra10_8C6F
-	DEC Pulse1PitchPointer+1,X
+	DEC MusicPitchPointer+1,X
 bra10_8C6F:
-	LDA Pulse1PitchPointer+1,X
+	LDA MusicPitchPointer+1,X
 	STA SoundPointer+1
 bra10_8C74:
 	LDX CurrentTrackOffset
 	LDY #$00
 	LDA (SoundPointer),Y
-	STA Pulse1PitchDelay,X
+	STA MusicPitchDelay,X
 	JMP loc10_8C1F
 bra10_8C81:
-	DEC Pulse1PitchDelay,X
+	DEC MusicPitchDelay,X
 bra10_8C84_RTS:
 	RTS
 UpdateChannels:
@@ -1086,19 +1080,19 @@ bra10_8CA2:
 	BPL bra10_8CC0
 	DEC SoundPointer+1
 bra10_8CC0:
-	LDA Pulse1Pitch,Y
+	LDA MusicPitch,Y
 	CLC
 	ADC $FE
-	STA Pulse1FinalPitch,Y
+	STA MusicFinalPitch,Y
 	STA Sq1Lo
-	LDA Pulse1FinalPitch+1,Y
+	LDA MusicFinalPitch+1,Y
 	STA SoundPointer
-	LDA Pulse1Pitch+1,Y
+	LDA MusicPitch+1,Y
 	ADC SoundPointer+1
 	TAX
 	CPX $FE
 	BEQ bra10_8CE3_RTS
-	STA Pulse1FinalPitch+1,Y
+	STA MusicFinalPitch+1,Y
 	ORA #$F8
 	STA Sq1Hi
 bra10_8CE3_RTS:
@@ -1127,19 +1121,19 @@ bra10_8CF4:
 	BPL bra10_8D12
 	DEC SoundPointer+1
 bra10_8D12:
-	LDA Pulse1Pitch,Y
+	LDA MusicPitch,Y
 	CLC
 	ADC $FE
-	STA Pulse1FinalPitch,Y
+	STA MusicFinalPitch,Y
 	STA Sq2Lo
-	LDA Pulse1FinalPitch+1,Y
+	LDA MusicFinalPitch+1,Y
 	STA SoundPointer
-	LDA Pulse1Pitch+1,Y
+	LDA MusicPitch+1,Y
 	ADC SoundPointer+1
 	TAX
 	CPX $FE
 	BEQ bra10_8D35_RTS
-	STA Pulse1FinalPitch+1,Y
+	STA MusicFinalPitch+1,Y
 	ORA #$F8
 	STA Sq2Hi
 bra10_8D35_RTS:
@@ -1167,19 +1161,19 @@ bra10_8D4F:
 	BPL bra10_8D61
 	DEC SoundPointer+1
 bra10_8D61:
-	LDA Pulse1Pitch,Y
+	LDA MusicPitch,Y
 	CLC
 	ADC $FE
-	STA Pulse1FinalPitch,Y
+	STA MusicFinalPitch,Y
 	STA TriLo
-	LDA Pulse1FinalPitch+1,Y
+	LDA MusicFinalPitch+1,Y
 	STA SoundPointer
-	LDA Pulse1Pitch+1,Y
+	LDA MusicPitch+1,Y
 	ADC SoundPointer+1
 	TAX
 	CPX $FE
 	BEQ bra10_8D84_RTS
-	STA Pulse1FinalPitch+1,Y
+	STA MusicFinalPitch+1,Y
 	ORA #$F8
 	STA TriHi
 bra10_8D84_RTS:
@@ -1198,7 +1192,7 @@ bra10_8D95:
 	ORA #$30
 	STA NoiseVol
 	JSR FetchModulation
-	LDA Pulse1Pitch,Y
+	LDA MusicPitch,Y
 	CLC
 	ADC SoundPointer
 	STA NoiseLo
@@ -1222,7 +1216,7 @@ SetDPCMPitch:
 	STA DPCMFlag
 	LDA #$0f
 	STA APUStatus
-	LDA Pulse1Pitch,Y
+	LDA MusicPitch,Y
 	BEQ UpdateDPCM_Quit
 	TAY
 	LDA DPCM_PitchTable, Y
@@ -1246,7 +1240,8 @@ UpdateDPCM_Quit:
 FetchVolume:
 	TYA
 	PHA
-	LDA Pulse1VolumeDelay,X
+	JSR CheckForBongos
+	LDA MusicVolumeDelay,X
 	TAY
 	CPY #$FF
 	BNE bra10_8DC0
@@ -1256,9 +1251,9 @@ bra10_8DC0:
 	PLA
 	PHA
 	TAY
-	LDA Pulse1VolumePointer,Y
+	LDA MusicVolumePointer,Y
 	STA SoundPointer
-	LDA Pulse1VolumePointer+1,Y
+	LDA MusicVolumePointer+1,Y
 	STA SoundPointer+1
 	LDY #$01
 	LDA (SoundPointer),Y
@@ -1270,7 +1265,7 @@ loc10_8DD1:
 FetchDutyCycle:
 	TYA
 	PHA
-	LDA Pulse1DutyDelay,X
+	LDA MusicDutyDelay,X
 	TAY
 	CPY #$FF
 	BNE bra10_8DE5
@@ -1280,9 +1275,9 @@ bra10_8DE5:
 	PLA
 	PHA
 	TAY
-	LDA Pulse1DutyPointer,Y
+	LDA MusicDutyPointer,Y
 	STA SoundPointer
-	LDA Pulse1DutyPointer+1,Y
+	LDA MusicDutyPointer+1,Y
 	STA SoundPointer+1
 	LDY #$01
 	LDA (SoundPointer),Y
@@ -1294,7 +1289,7 @@ loc10_8DF6:
 FetchModulation:
 	TYA
 	PHA
-	LDA Pulse1PitchDelay,X
+	LDA MusicPitchDelay,X
 	TAY
 	CPY #$FF
 	BNE bra10_8E0A
@@ -1304,9 +1299,9 @@ bra10_8E0A:
 	PLA
 	PHA
 	TAY
-	LDA Pulse1PitchPointer,Y
+	LDA MusicPitchPointer,Y
 	STA SoundPointer
-	LDA Pulse1PitchPointer+1,Y
+	LDA MusicPitchPointer+1,Y
 	STA SoundPointer+1
 	LDY #$01
 	LDA (SoundPointer),Y
@@ -1315,12 +1310,19 @@ loc10_8E1B:
 	PLA
 	TAY
 	RTS
-
+InitNoteLengthAddend:
+	LDA #0
+	STA NoteLengthAddend
+	STA NoteLengthAddend+1
+	STA NoteLengthAddend+2
+	STA NoteLengthAddend+3
+	STA NoteLengthAddend+4
+	RTS
 ;----------------------------------------
 ;SUBROUTINES ($8E20, $8E23)
 ;Increments the pointer for channel data, optionally ignoring the index for the current channel if the second subroutine is called.
 ;----------------------------------------
-sub10_8E20:
+AdvenaceAPUPC:
 	LDX CurrentTrackPointerOffset ;Get current channel
 sub_58_8E23:
 	INC MusicPointer,X
@@ -1358,6 +1360,24 @@ bra10_8E32:
 bra10_8E40_RTS:
 	RTS
 
+CheckForBongos:
+	LDA MusicVolumeEnv, X
+	BEQ @MaybeRestore
+	CMP #$28
+	BNE @Ready
+	LDA Player1YoshiStatus
+	BNE @Ready
+	LDA #0
+	STA MusicVolumeEnv, X
+@Ready:
+	RTS
+@MaybeRestore:
+	LDA Player1YoshiStatus
+	BEQ @Ready
+	LDA #$28
+	STA MusicVolumeEnv, X
+	BNE @Ready
+
 tbl10_8E41:
 	dw Empty_Footer
 	dw SpinJump_Footer
@@ -1384,6 +1404,7 @@ tbl10_8E41:
 	dw EnemyHit6_Footer
 	dw EnemyHit7_Footer
 	dw EnemyHit8_Footer
+	dw EnemyHit9_Footer
 	dw YoshiTongue_Footer
 	dw YoshiSwallow_Footer
 	dw YoshiFireSpit_Footer
@@ -1395,11 +1416,10 @@ tbl10_8E41:
 	dw DryBones_Footer
 	dw Spring_Footer
 	dw Thwomp_Footer
-	dw Empty_Footer
-	dw Empty_Footer
-	dw Empty_Footer
-	dw Empty_Footer
-	dw Empty_Footer
+	dw Swooper_Footer
+	dw BossHit_Footer
+	dw ChuckHit_Footer
+	dw Vine_Footer
 	dw Empty_Footer
 	dw Empty_Footer
 	dw Empty_Footer
@@ -1441,6 +1461,7 @@ tbl10_8E41:
 	dw Empty_Footer
 	dw Ending_Footer
 	dw InvincibleStar_Footer
+	dw Athletic_Footer
 Empty_Footer:
 	db $00
 	dw UnknownMusPtr
@@ -1584,28 +1605,39 @@ ENDR
 REPT 15
 	db $3E ; E1 - F#2
 ENDR
-REPT 8
+REPT 9
 	db $34 ; G2 - D#3
 ENDR
-	db $2D
 	db $3E ; E3
 	db $3E ; F3
 	db $3E ; F#3
 	db $3E ; G3
-	db $28 ; G#3
-	db $28 ; A3
-	db $3C ; A#3
-	db $3E ; B3
-	db $3E ; C4
-	db $28 ; C#4
-	db $28 ; D4
-	db $3C ; D#4
-	db $3E ; E4
-	db $3E ; F4
-	db $3E ; F#4
-	db $3E ; G4
-	db $3E ; G#4
-	db $3E ; A4
+	db $3E ; G#3
+	db $2D ; A3
+	db $2D ; A#3
+	db $2D ; B3
+	db $2D ; C4
+	db $2D ; C#4
+	db $2D ; D4
+	db $2D ; D#4
+	db $2D ; E4
+	db $2D ; F4
+	db $2D ; F#4
+	db $2D ; G4
+	db $28 ; G#4
+	db $28 ; A4
+	db $3C ; A#4
+	db $3E ; B4
+	db $3E ; C5
+	db $28 ; C#5
+	db $28 ; D5
+	db $3C ; D#5
+	db $3E ; E5
+	db $3E ; F5
+	db $3E ; F#5
+	db $3E ; G5
+	db $3E ; G#5
+	db $3E ; A5
 DPCM_AddressTable:
 	db $7F			; C0
 	db Bb_DIM_DOWN >> 2	; C#0
@@ -1644,26 +1676,38 @@ DPCM_AddressTable:
 	db G_SUS_UP >> 2	; A#2
 	db YOSHI1 >> 2		; B2
 	db YOSHI2 >> 2		; C3
-	db SWIM >> 2		; C#3
+	db POWER_SNARE >> 2	; C#3 ; placeholder for swimming sample
 	db KICK_DRUM >> 2	; D3
 	db POWER_SNARE >> 2	; D#3
 	db $7F			; E3
 	db $7F			; F3
 	db $7F			; F#3
 	db $7F			; G3
-	db UC#4 >> 2		; G#3
-	db UD4 >> 2		; A3
-	db UD#4 >> 2		; A#3
-	db UE4 >> 2		; B3
-	db UF4 >> 2		; C4
-	db UC#4 >> 2		; C#4
-	db UD4 >> 2		; D4
-	db UD#4 >> 2		; D#4
-	db UE4 >> 2		; E4
-	db UF4 >> 2		; F4
-	db UF#4 >> 2		; F#4
-	db UG4 >> 2		; G4
-	db UG#4 >> 2		; G#4
+	db $7F			; G#3
+	db GH_AMBIENCE_1 >> 2	; A3
+	db GH_AMBIENCE_2 >> 2	; A#3
+	db GH_AMBIENCE_3 >> 2	; B3
+	db GH_AMBIENCE_4 >> 2	; C4
+	db GH_AMBIENCE_5 >> 2	; C#4
+	db GH_AMBIENCE_1 >> 2	; D4
+	db GH_AMBIENCE_2 >> 2	; D#4
+	db GH_AMBIENCE_3 >> 2	; E4
+	db GH_AMBIENCE_4 >> 2	; F4
+	db GH_AMBIENCE_5 >> 2	; F#4
+	db GH_AMBIENCE_6 >> 2	; G4
+	db UC#4 >> 2		; G#4
+	db UD4 >> 2		; A4
+	db UD#4 >> 2		; A#4
+	db UE4 >> 2		; B4
+	db UF4 >> 2		; C5
+	db UC#4 >> 2		; C#5
+	db UD4 >> 2		; D5
+	db UD#4 >> 2		; D#5
+	db UE4 >> 2		; E5
+	db UF4 >> 2		; F5
+	db UF#4 >> 2		; F#5
+	db UG4 >> 2		; G5
+	db UG#4 >> 2		; G#5
 	db UA4 >> 2		; A4
 DPCM_EndAddressTable:
 	dl $FF			; C0
@@ -1703,26 +1747,38 @@ DPCM_EndAddressTable:
 	dl G_SUS_UP_END		; A#2
 	dl YOSHI1_END		; B2
 	dl YOSHI2_END		; C3
-	dl SWIM_END		; C#3
+	dl POWER_SNARE_END	; C#3
 	dl KICK_DRUM_END	; D3
 	dl POWER_SNARE_END	; D#3
 	dl $FF			; E3
 	dl $FF			; F3
 	dl $FF			; F#3
 	dl $FF			; G3
-	dl UC#4_END		; G#3
-	dl UD4_END		; A3
-	dl UD#4_END		; A#3
-	dl UE4_END		; B3
-	dl UF4_END		; C4
-	dl UC#4_END		; C#4
-	dl UD4_END		; D4
-	dl UD#4_END		; D#4
-	dl UE4_END		; E4
-	dl UF4_END		; F4
-	dl UF#4_END		; F#4
-	dl UG4_END		; G4
-	dl UG#4_END		; G#4
+	dl $FF			; G#3
+	dl GH_AMBIENCE_1_END	; A3
+	dl GH_AMBIENCE_2_END	; A#3
+	dl GH_AMBIENCE_3_END	; B3
+	dl GH_AMBIENCE_4_END	; C4
+	dl GH_AMBIENCE_5_END	; C#4
+	dl GH_AMBIENCE_1_END	; D4
+	dl GH_AMBIENCE_2_END	; D#4
+	dl GH_AMBIENCE_3_END	; E4
+	dl GH_AMBIENCE_4_END	; F4
+	dl GH_AMBIENCE_5_END	; F#4
+	dl GH_AMBIENCE_6_END	; G4
+	dl UC#4_END		; G#4
+	dl UD4_END		; A4
+	dl UD#4_END		; A#4
+	dl UE4_END		; B4
+	dl UF4_END		; C5
+	dl UC#4_END		; C#5
+	dl UD4_END		; D5
+	dl UD#4_END		; D#5
+	dl UE4_END		; E5
+	dl UF4_END		; F5
+	dl UF#4_END		; F#5
+	dl UG4_END		; G5
+	dl UG#4_END		; G#5
 	dl UA4_END		; A4
 DPCM_PitchTable:
 	db $F			; C0
@@ -1769,20 +1825,32 @@ DPCM_PitchTable:
 	db $F			; F3
 	db $F			; F#3
 	db $F			; G3
-	db $E			; G#3
+	db $F			; G#3
 	db $E			; A3
 	db $E			; A#3
 	db $E			; B3
 	db $E			; C4
-	db $F			; C#4
+	db $E			; C#4
 	db $F			; D4
 	db $F			; D#4
 	db $F			; E4
 	db $F			; F4
 	db $F			; F#4
 	db $F			; G4
-	db $F			; G#4
-	db $F			; A4
+	db $E			; G#4
+	db $E			; A4
+	db $E			; A#4
+	db $E			; B4
+	db $E			; C5
+	db $F			; C#5
+	db $F			; D5
+	db $F			; D#5
+	db $F			; E5
+	db $F			; F5
+	db $F			; F#5
+	db $F			; G5
+	db $F			; G#5
+	db $F			; A5
  ;include sfx_ data
 	.include sound/sfx_SpinJump.asm
 	.include sound/sfx_Pause.asm
@@ -1808,6 +1876,7 @@ DPCM_PitchTable:
 	.include sound/sfx_EnemyHit6.asm
 	.include sound/sfx_EnemyHit7.asm
 	.include sound/sfx_EnemyHit8.asm
+	.include sound/sfx_EnemyHit9.asm
 	.include sound/sfx_YoshiTongue.asm
 	.include sound/sfx_YoshiSwallow.asm
 	.include sound/sfx_YoshiFireSpit.asm
@@ -1819,6 +1888,9 @@ DPCM_PitchTable:
 	.include sound/sfx_DryBones.asm
 	.include sound/sfx_Spring.asm
 	.include sound/sfx_Thwomp.asm
+	.include sound/sfx_Swooper.asm
+	.include sound/sfx_BossHit.asm
+	.include sound/sfx_Vine.asm
  ;include music data
 	.include sound/mus_Title.asm
 	.include sound/mus_GameOver.asm
@@ -1836,4 +1908,5 @@ DPCM_PitchTable:
 	.include sound/mus_Underwater.asm
 	.include sound/mus_Ending.asm
 	.include sound/mus_InvincibleStar.asm
+	.include sound/mus_Athletic.asm
 ;	.incbin prg/padding/padding058_59.bin

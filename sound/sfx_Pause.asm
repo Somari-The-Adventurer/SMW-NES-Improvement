@@ -2,7 +2,7 @@ Pause_P2:
 	.byte SongSpeed, 1
 	.byte Transpose, 24
 	.byte DutySet, $38
-	.byte PitchSet, $39
+	.byte PitchSet, $00
 	.byte VolSet, $7E
 	.byte NLen+6
 	.byte E3

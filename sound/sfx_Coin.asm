@@ -2,7 +2,7 @@ Coin_P1:
 	.byte SongSpeed, 1
 	.byte Transpose, $00
 	.byte DutySet, $38
-	.byte PitchSet, $7A
+	.byte PitchSet, $0F
 	.byte VolSet, $7E
 	.byte NLen+3
 	.byte B5

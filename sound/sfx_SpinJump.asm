@@ -1,7 +1,7 @@
 SpinJump_P1:
 	.byte SongSpeed, 1
 	.byte Transpose, 0
-	.byte PitchSet, $39
+	.byte PitchSet, $00
 	.byte VolSet, $7F
 	.byte NLen+1
 	.byte D5

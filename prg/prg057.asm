@@ -464,7 +464,7 @@ GetPntrRidingSprite: ;Only do this part if player sprite isn't in a pit
 	TAX ;move it to X
 	LDA tbl4_A5E7,X ;(This table only has one entry but is followed by another table)
 	STA $38 ;store low byte
-	LDA tbl4_A5E8,X ;load the high byte from the next table 
+	LDA tbl4_A5E7+1,X ;load the high byte from the next table 
 	STA $39  ;store high byte
 	LDX PlayerAction+1 ;get the previous player action as an offset
 	LDA PlayerRidingActionTable,X ;use that to select an action for the player whilst riding 
@@ -720,13 +720,13 @@ sub4_A4CE:
 	STA MusicRegister
 	RTS
 LevelMusicQueue:
-	db mus_Overworld, mus_Overworld, mus_Title, mus_Castle ;World 1
-	db mus_Overworld, mus_Title, mus_GhostHouse, mus_Castle ;World 2
+	db mus_Overworld, mus_Overworld, mus_Athletic, mus_Castle ;World 1
+	db mus_Overworld, mus_Athletic, mus_GhostHouse, mus_Castle ;World 2
 	db mus_Underground, mus_Underwater, mus_GhostHouse, mus_Castle ;World 3
-	db mus_Overworld, mus_ForestofIllusion, mus_Title, mus_Castle ;World 4
+	db mus_Overworld, mus_Athletic, mus_Overworld, mus_Castle ;World 4
 	db mus_Overworld, mus_GhostHouse, mus_Underwater, mus_Castle ;World 5
-	db mus_Overworld, mus_GhostHouse, mus_ForestofIllusion, mus_Castle ;World 6
-	db mus_Overworld, mus_ForestofIllusion, mus_GhostHouse, mus_Castle ;World 7
+	db mus_Overworld, mus_GhostHouse, mus_Overworld, mus_Castle ;World 6
+	db mus_Overworld, mus_Athletic, mus_GhostHouse, mus_Castle ;World 7
 	db mus_Overworld ;Yoshi's House
 	db $60
 ;-=-=-=-=-=--=-=-=-=-=-=-
@@ -914,17 +914,12 @@ RidingLeftXoffset:
 	db $F1
 	db $F3
 tbl4_A5E7:
-	db $F1
-tbl4_A5E8
-	db $A5
-	db $FA
-	db $A5
-	db $03
-	db $A6
-	db $FA
-	db $A5
-	db $FA
-	db $A5
+	dw ptr4_A5F1
+	dw ptr4_A5FA
+	dw ptr4_A603
+	dw ptr4_A5FA
+	dw ptr4_A5FA
+ptr4_A5F1:
 	db $98
 	db $98
 	db $98
@@ -934,6 +929,7 @@ tbl4_A5E8
 	db $99
 	db $99
 	db $98
+ptr4_A5FA:
 	db $8A
 	db $8A
 	db $8A
@@ -943,6 +939,7 @@ tbl4_A5E8
 	db $86
 	db $86
 	db $8B
+ptr4_A603:
 	db $81
 	db $81
 	db $81
@@ -3368,7 +3365,12 @@ bra4_B33F:
 ;-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=
 ;END OF YOSHI FIRE SPAWN
 ;-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=	
-	
+PlayerWalkDecellerate:
+	LDA PlayerXSpeed
+	BEQ @Done
+	DEC PlayerXSpeed
+@Done:
+	RTS
 ;-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=
 ;WALKING AND RUNNING
 ;-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-=-=-=-=-=	
@@ -3382,7 +3384,7 @@ PlayerWalkRoutine:
 PlayerWalkLeft:
 	LDA zInputCurrentState
 	AND #dirLeft
-	BEQ PlayerWalkDone ;Make sure left is held
+	BEQ PlayerWalkDecellerate ;Make sure left is held
 	LDA PlayerMovement
 	ORA #$41 ;Make the player face left
 loc4_B368:
@@ -3392,7 +3394,7 @@ loc4_B368:
 	BCS SetWalking ;Set walking speed at #$10, or 16 decimal
 	LDA PlayerXSpeed
 	CLC
-	ADC #$04
+	ADC #$01
 	STA PlayerXSpeed ;Accelerate the player's speed by 4
 SetWalking:
 	LDA #$01
@@ -3419,7 +3421,7 @@ loc4_B395:
 	BCS SwimMoveDone ;If X speed < 16,
 	LDA PlayerXSpeed
 	CLC
-	ADC #$04
+	ADC #$01
 	STA PlayerXSpeed ;Increase the player's X speed by 4
 SwimMoveDone:
 	RTS
@@ -3514,7 +3516,7 @@ DoBJump:
 	LDA zInputCurrentState
 	AND #btnB
 	BEQ DoLowJump
-	LDY #$58 ;If B is held, set vertical speed to $58
+	LDY #$50 ;If B is held, set vertical speed to $58
 DoLowJump:
 	LDA zInputCurrentState
 	AND #dirDown
@@ -3627,12 +3629,16 @@ PlayerRunRoutine:
 	STA $0314 ;Likely an unused or residual opcode. Does nothing.
 	LDA PlayerXSpeed
 	CMP #$10
-	BCS PlayerWalk2Done ;Limit the player's X speed to #$10, or 16 decimal
+	BCS PlayerWalk2Decellerate ;Limit the player's X speed to #$10, or 16 decimal
 	LDA PlayerXSpeed
 	CLC
-	ADC #$04
+	ADC #$01
 	STA PlayerXSpeed ;Increment the player's X speed by 4
 PlayerWalk2Done:
+	RTS
+PlayerWalk2Decellerate:
+	BEQ PlayerWalk2Done
+	DEC PlayerXSpeed
 	RTS
 unused_func1:
 	LDA $0314 ;unlogged
@@ -3654,11 +3660,11 @@ DoPlayerRun:
 	LDA #$02
 	STA PlayerAction ;Set action to running
 	LDA PlayerXSpeed
-	CMP #$40
-	BCS bra4_B55B_RTS ;Set running speed cap at #$40, or 64 decimal
+	CMP #$30
+	BCS bra4_B55B_RTS ;Set running speed cap at #$30, or 48 decimal
 	LDA PlayerXSpeed
 	CLC
-	ADC #$04
+	ADC #$01
 	STA PlayerXSpeed ;Accelerate the player's speed by 4 until the cap is reached
 bra4_B55B_RTS:
 	RTS
@@ -4091,11 +4097,10 @@ bra4_B859:
 loc4_B864:
 	STA PlayerMovement
 	LDA PlayerXSpeed
-	CMP #$10 ;caps speed for when Yoshi sticks his tongue out
+	JSR ParseVelocityCap ;caps speed for when Yoshi sticks his tongue out
 	BCS TongueSpdBoostDone ;Branch if x speed goes over 16 (this is basically a speed cap)
 	LDA PlayerXSpeed
-	CLC
-	ADC #$04
+	ADC #$01
 	STA PlayerXSpeed
 TongueSpdBoostDone:
 	RTS
@@ -4209,32 +4214,13 @@ rout1done:		RTS
 ;SPEED SCALING AND SPRITE ALIGNMENT 
 ;-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 sub4_B938: ;determine if player is walking or running 
-	LDA PlayerXSpeed	
-	CMP #$10	
-	BCS GetPlayerTrueXSpd ;if player's x speed exceeds #$10 (walking speed), branch
-	LDA FrameCount ;else
-	AND #$01 ;bitmask the frame count and use it as the scaled speed instead 
-	JMP loc4_B94F ;skip ahead to walking section
-	
-GetPlayerTrueXSpd: ; this is used when the player is moving faster than #$10, reads from a running speed table
-	ROR
-	ROR
-	ROR
-	ROR ;rotate bits right 4 times to divide speed
-	AND #$0F ;mask out the upper 4 bits of the result
-	TAY ;move it to Y as an offset
+	LDY PlayerXSpeed
+	CPY #$2d
+	LDA #$03
+	BCS @Cap
 	LDA PlayerXSpdTbl,Y ;use that to load a movement speed for the player
-	
-loc4_B94F: ;Decide if player should start walking
+@Cap:
 	STA PlayerMetaspriteHAlign ;store the loaded scaled speed value
-	LDA PlayerXSpeed
-	CMP #$03
-	BCS bra4_B95B ;if player X speed exceeds 3, branch (exits static/standing state)
-	LDA #$00
-	STA PlayerMetaspriteHAlign ;else set scaled speed to 00 (Standing speed)
-	
-bra4_B95B:
-	LDA ScaledPlayerXSpd
 	BNE MovePlayerLeft ;if scaled speed isn't zero, branch
 ;else if player is static
 	LDA PlayerXScreen
@@ -4521,22 +4507,52 @@ loc4_BAD0_RTS:
 ;***************************************************************
 PlayerXSpdTbl: ;X speed table
 ;the higher the PlayerXspeed, the further through the table you can move
-	db $00
-	db $01
-	db $02
-	db $03
-	db $04
-	db $05
-	db $06
-	db $07
-	db $07
-	db $07
-	db $07
-	db $07
-	db $07
-	db $07
-	db $07
-	db $07
+	db $00 ; 00
+	db $01 ; 01
+	db $00 ; 02
+	db $00 ; 03
+	db $00 ; 04
+	db $00 ; 05
+	db $01 ; 06
+	db $00 ; 07
+	db $01 ; 08
+	db $00 ; 09
+	db $01 ; 0a
+	db $01 ; 0b
+	db $00 ; 0c
+	db $01 ; 0d
+	db $01 ; 0e
+	db $01 ; 0f
+	db $01 ; 10
+	db $01 ; 11
+	db $01 ; 12
+	db $01 ; 13
+	db $02 ; 14
+	db $01 ; 15
+	db $01 ; 16
+	db $02 ; 17
+	db $01 ; 18
+	db $02 ; 19
+	db $01 ; 1a
+	db $02 ; 1b
+	db $02 ; 1c
+	db $02 ; 1d
+	db $02 ; 1e
+	db $02 ; 1f
+	db $02 ; 20
+	db $02 ; 21
+	db $02 ; 22
+	db $02 ; 23
+	db $02 ; 24
+	db $02 ; 25
+	db $03 ; 26
+	db $02 ; 27
+	db $03 ; 28
+	db $02 ; 29
+	db $03 ; 2a
+	db $03 ; 2b
+	db $02 ; 2c
+	db $03 ; 2d
 tbl4_BAE1: ;Mid Air hang time table?? might affect Y speed in general
 	db $01
 	db $01

@@ -2,7 +2,7 @@ Chainsaw_Noise:
 	.byte SongSpeed, 1
 	.byte Transpose, $01
 	.byte DutySet, $38
-	.byte PitchSet, $39
+	.byte PitchSet, $00
 	.byte VolSet, $41
 	.byte NLen+3
 	.byte $45

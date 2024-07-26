@@ -3,7 +3,7 @@ Castle_P1:
 	.byte Transpose, 6
 	.byte DutySet, $38
 	.byte PitchSet, $05
-	.byte VolSet, $29
+	.byte VolSet, $1C
 	.byte NLen+16
 	.byte NRest
 	.byte NLen+22
@@ -377,7 +377,7 @@ Castle_P2:
 	.byte Transpose, 5
 	.byte DutySet, $38
 	.byte PitchSet, $05
-	.byte VolSet, $29
+	.byte VolSet, $1C
 	.byte NLen+8
 	.byte NRest
 	.byte NLen+23
@@ -1190,7 +1190,7 @@ Castle_Tri:
 	.byte Transpose, 12
 	.byte DutySet, $38
 	.byte PitchSet, $05
-	.byte VolSet, $29
+	.byte VolSet, $1C
 	.byte NLen+24
 	.byte G1
 	.byte NLen+21

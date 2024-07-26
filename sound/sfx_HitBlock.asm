@@ -4,9 +4,9 @@ HitBlock_Noise:
 	.byte DutySet, 0
 	.byte PitchSet, 0
 	.byte VolSet, $52
-	.byte NLen+2
-	.byte $3E
-	.byte $28
+	.byte NLen+1
+	.byte $3D
+	.byte $20
 	.byte $ff
 HitBlock_Footer:
 	.byte $83

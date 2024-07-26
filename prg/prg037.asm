@@ -625,54 +625,11 @@ DinoTorchFlat:
 	db $D0
 	db $05, $06
 	db $0B, $0C
+
 Obj_hE4:
 	LDX $A4
-	LDA ObjectXPos,X
-	SEC
-	SBC PlayerXPosDup
-	STA ObjectXDistance,X
-	LDA ObjectXScreen,X
-	SBC PlayerXScreenDup
-	STA ObjXScreenDistance,X
-	STA $28
-	BEQ bra_8506
-	CMP #$FF
-	BEQ bra_8506
-	JMP Obj_RemoveObject
-bra_8506:
-	LDA ObjectYPos,X
-	SEC
-	SBC PlayerYPosDup
-	STA ObjectYDistance,X
-	LDA ObjectYScreen,X
-	SBC PlayerYScreenDup
-	STA ObjYScreenDistance,X
-	LDA PlayerYScreenDup
-	CMP ObjectYScreen,X
-	BEQ bra_8548
-	LDA ObjYScreenDistance,X
-	BPL bra_8537
-	LDA ObjectYDistance,X
-	CLC
-	ADC #$10
-	STA ObjectYDistance,X
-	LDA ObjYScreenDistance,X
-	ADC #$00
-	STA ObjYScreenDistance,X
-	JMP loc_8548
-bra_8537:
-	LDA ObjectYDistance,X
-	SEC
-	SBC #$10
-	STA ObjectYDistance,X
-	LDA ObjYScreenDistance,X
-	SBC #$00
-	STA ObjYScreenDistance,X
-bra_8548:
-loc_8548:
-	LDA FreezeFlag
-	BEQ bra_854E
-	RTS
+	Obj_DistCalc bra_854E
+
 bra_854E:
 	LDA ObjectAction,X
 	CMP #$02
@@ -774,66 +731,23 @@ tbl_8610:
 	dw ptr_AA7B
 	dw Obj_PowerupEatCheck
 	dw ptr7_861A
-	dw ptr_AD88
+	dw Obj_FlipKill
 ptr7_861A:
 	JSR Obj_CapeHitCheck
 	JSR Obj_PlayerHitCheck
 	JSR Obj_KillOnSpinJump
-	JSR Obj_StompKnockback
+	JSR Obj_StompRebound
 	LDA #$00
 	STA ObjectState,X
 	STA ObjectVariables,X
 	LDA #$02
 	STA ObjectAction,X
 	RTS
+
 Obj_hE2:
 	LDX $A4
-	LDA ObjectXPos,X
-	SEC
-	SBC PlayerXPosDup
-	STA ObjectXDistance,X
-	LDA ObjectXScreen,X
-	SBC PlayerXScreenDup
-	STA ObjXScreenDistance,X
-	STA $28
-	BEQ bra_8652
-	CMP #$FF
-	BEQ bra_8652
-	JMP Obj_RemoveObject
-bra_8652:
-	LDA ObjectYPos,X
-	SEC
-	SBC PlayerYPosDup
-	STA ObjectYDistance,X
-	LDA ObjectYScreen,X
-	SBC PlayerYScreenDup
-	STA ObjYScreenDistance,X
-	LDA PlayerYScreenDup
-	CMP ObjectYScreen,X
-	BEQ bra_8694
-	LDA ObjYScreenDistance,X
-	BPL bra_8683
-	LDA ObjectYDistance,X
-	CLC
-	ADC #$10
-	STA ObjectYDistance,X
-	LDA ObjYScreenDistance,X
-	ADC #$00
-	STA ObjYScreenDistance,X
-	JMP loc_8694
-bra_8683:
-	LDA ObjectYDistance,X
-	SEC
-	SBC #$10
-	STA ObjectYDistance,X
-	LDA ObjYScreenDistance,X
-	SBC #$00
-	STA ObjYScreenDistance,X
-bra_8694:
-loc_8694:
-	LDA FreezeFlag
-	BEQ bra_869A
-	RTS
+	Obj_DistCalc bra_869A
+
 bra_869A:
 	JSR sub_879B
 	LDX $A4
@@ -848,6 +762,7 @@ bra_869A:
 tbl_86B1:
 	dw sub_86E9
 	dw ptr7_86B5
+
 ptr7_86B5:
 	LDY #$00
 	LDA ObjectSlot,X
@@ -867,6 +782,7 @@ bra_86C0:
 	STA ObjectVariables,X
 	DEC ObjectAction,X
 	RTS
+
 bra_86DD:
 	LDA FrameCount
 	AND #$01
@@ -875,6 +791,7 @@ bra_86DD:
 	JMP GetMovementData
 bra_86E8_RTS:
 	RTS
+
 sub_86E9:
 	JSR sub3_B057
 	BEQ bra_874F
@@ -889,23 +806,25 @@ sub_86E9:
 	STA ObjectYPos,X
 	BCS bra_870A
 	CMP #$F0
-	BCC bra_8728
+	BCC loc_8728
+
 bra_870A:
 	CLC
 	ADC #$10
 	STA ObjectYPos,X
 	INC ObjectYScreen,X
 	JMP loc_8728
+
 bra_8716:
 	CLC
 	ADC ObjectYPos,X
 	STA ObjectYPos,X
-	BCS bra_8728
+	BCS loc_8728
 	SEC
 	SBC #$10
 	STA ObjectYPos,X
 	DEC ObjectYScreen,X
-bra_8728:
+
 loc_8728:
 	LDY #$08
 	LDA ObjectState,X
@@ -968,6 +887,7 @@ bra_8790:
 	ORA $25
 	STA EnemyAnimFrame,X
 	RTS
+
 sub_879B:
 	LDA #$07
 	STA $25
@@ -1033,7 +953,7 @@ tbl_8819:
 	dw ptr_AA7B
 	dw Obj_PowerupEatCheck
 	dw ptr7_8823
-	dw ptr_AD88
+	dw Obj_FlipKill
 ptr7_8823:
 	JSR Obj_PlayerHitCheck
 	JSR Obj_KillOnSpinJump
@@ -1115,7 +1035,7 @@ bra_88BC:
 	STA ObjectState,X
 	STA ObjectVariables,X
 	STA ObjectAction,X
-	JMP Obj_StompKnockback
+	JMP Obj_StompRebound
 	RTS
 ptr6_88D1:
 	LDX $A4
@@ -1895,7 +1815,7 @@ bra_8C6B:
 	LDX $A4
 	JSR sub_82EA
 	JSR jmp_54_BF74
-	LDA #sfx_EnemyHit3
+	LDA #sfx_EnemyHit2
 	STA SFXRegister
 	RTS
 Obj_hDE:
@@ -3208,7 +3128,7 @@ bra_9612:
 	BEQ bra_9619
 	JMP loc_970B_RTS
 bra_9619:
-	LDA #sfx_Thunder?
+	LDA #sfx_Explosion
 	STA SFXRegister
 	INC $05F6
 	LDY ObjectCount

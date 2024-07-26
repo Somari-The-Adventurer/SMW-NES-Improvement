@@ -11,7 +11,7 @@ bra8_8066:
 	LDY #$03
 	LDA ObjFrameCounter
 	AND #$08
-	BEQ @Continue ;Alternate between animation frames 3 and 4 every 8 frames
+	BEQ @Continue ;Alternate between Koopa frames 3 and 4 every 8 frames
 	INY
 
 @Continue:
@@ -53,12 +53,12 @@ Koopa_GetFunction:
 	AND #%00011111 ;Mask out upper 3 bits of object's state
 	ASL
 	TAY ;Get pointer index
-	LDA tbl8_8114,Y
+	LDA FuncTbl_Koopa,Y
 	STA $32
-	LDA tbl8_8114+1,Y
+	LDA FuncTbl_Koopa+1,Y
 	STA $33
 	JMP ($32)
-tbl8_8114:
+FuncTbl_Koopa:
 	dw Obj_YoshiTongueCheck
 	dw ptr_AA7B
 	dw Obj_PowerupEatCheck
@@ -66,41 +66,14 @@ tbl8_8114:
 	dw Koopa_HitRespond
 
 Koopa_HitCheck:
-	JSR Obj_CapeHitCheck ;Cape hit check
-	JSR Obj_PlayerHitCheck ;Check for collision
-	JSR Obj_KillOnSpinJump ;If the player is touching the Koopa and not hurt, kill it if it's being spin jumped on
-	JSR Obj_StompKnockback ;The player must be jumping on it like normal if it's reached this point, so knock them back
-	LDA #16
-	BMI bra8_8147 ;Redundant branch (16 isn't negative)
-	CLC
-	ADC ObjectYPos,X
-	STA ObjectYPos,X ;Position the Beach Koopa 16 pixels lower
-	BCS bra8_813B ;Add 16 if the vertical screen is crossed
-	CMP #$F0
-	BCC loc8_8159 ;Branch if it spawns more than 16 pixels below the screen boundary
+	JSR Obj_CapeHitCheck ;Kill if hit by cape
+	JSR Obj_PlayerHitCheck ;Check for collision with player
+	JSR Obj_KillOnSpinJump ;Kill if spin-jumped on
+	JSR Obj_StompRebound ;The player must be stomping on it if the code reached this point, so make them bounce off the object
+	Obj_VertOffset 16,loc8_8159 ;Position the Beach Koopa 16 pixels lower
 
-;Add 16 to the Beach Koopa's position if it crosses a vertical screen boundary
-bra8_813B:
-	CLC
-	ADC #16
-	STA ObjectYPos,X
-	INC ObjectYScreen,X ;Add 16 to vertical position (assuming overflow)
-	JMP loc8_8159
-
-;Subtracts 16 from the Beach Koopa's position, goes unused
-bra8_8147:
-	CLC
-	ADC ObjectYPos,X
-	STA ObjectYPos,X
-	BCS loc8_8159
-	SEC
-	SBC #16
-	STA ObjectYPos,X
-	DEC ObjectYScreen,X
-
-;Calculate horizontal distance between the new object and player
 loc8_8159:
-	Obj_DistCalc bra8_81BD
+	Obj_DistCalc bra8_81BD ;Calculate the distance between the Beach Koopa and player
 
 bra8_81BD:
 	LDY ObjectCount ;Set index for the newly-spawned Beach Koopa
@@ -151,51 +124,52 @@ ptr6_820E:
 	LDA EnemyAnimFrame,X
 	ASL
 	TAX ;Get index for current frame
-	LDA KoopaMappings,X
+	LDA SprMapTbl_Koopa,X
 	STA $32
-	LDA KoopaMappings+1,X
+	LDA SprMapTbl_Koopa+1,X
 	STA $33 ;Load mapping pointer
-	LDY #$80
+	LDY #$80 ;Use bank 2 by default
 	LDX $A4
 	LDA ObjectSlot,X
-	AND #$01
+	AND #%00000001
 	BEQ bra8_822C
-	LDY #$C0
+		LDY #$C0 ;Use bank 3 if lower bit of ID is set
+
 bra8_822C:
 	STY $36
 	LDA ObjectState,X
 	AND #%01000000
-	STA $05F0 ;Store object's horizontal direction
+	STA ObjectAttributes ;Store object's horizontal direction
 	JMP jmp_52_A118
 	RTS
 
-KoopaMappings:
-	dw BeachKoopaWalk1
-	dw BeachKoopaWalk2
-	dw BeachKoopaSlide
-	dw KoopaWalk1
-	dw KoopaWalk2
-	dw ParatroopaWalk1
-	dw ParatroopaWalk2
-BeachKoopaWalk1:
+SprMapTbl_Koopa:
+	dw SprMap_BeachKoopaWalk1
+	dw SprMap_BeachKoopaWalk2
+	dw SprMap_BeachKoopaSlide
+	dw SprMap_KoopaWalk1
+	dw SprMap_KoopaWalk2
+	dw SprMap_ParatroopaWalk1
+	dw SprMap_ParatroopaWalk2
+SprMap_BeachKoopaWalk1:
 	db $02
 	db $02
 	db $94
 	db $01, $02
 	db $06, $07
-BeachKoopaWalk2:
+SprMap_BeachKoopaWalk2:
 	db $02
 	db $02
 	db $94
 	db $01, $03
 	db $08, $09
-BeachKoopaSlide:
+SprMap_BeachKoopaSlide:
 	db $02
 	db $02
 	db $94
 	db $04, $05
 	db $0A, $0B
-KoopaWalk1:
+SprMap_KoopaWalk1:
 	db $02
 	db $04
 	db $94
@@ -203,7 +177,7 @@ KoopaWalk1:
 	db $18, $19
 	db $27, $28
 	db $35, $36
-KoopaWalk2:
+SprMap_KoopaWalk2:
 	db $02
 	db $04
 	db $94
@@ -211,7 +185,7 @@ KoopaWalk2:
 	db $1A, $1B
 	db $29, $2A
 	db $37, $38
-ParatroopaWalk1:
+SprMap_ParatroopaWalk1:
 	db $04
 	db $04
 	db $94
@@ -219,7 +193,7 @@ ParatroopaWalk1:
 	db $1C, $1D, $1E, $1F
 	db $FF, $2C, $2D, $2E
 	db $FF, $39, $3A, $FF
-ParatroopaWalk2:
+SprMap_ParatroopaWalk2:
 	db $04
 	db $04
 	db $94
@@ -240,22 +214,25 @@ bra8_82FF:
 	BPL bra8_8308
 	JMP jmp_54_B5BB
 	RTS
+
 bra8_8308:
-	JSR sub8_83D0
+	JSR GenObj_Paratroopa
 	LDA FrameCount
 	AND #$01
 	BNE bra8_8316
 	LDA #$12
-	JSR GetMovementData
+	JSR GetMovementData ;Get jump arc
+
 bra8_8316:
 	LDY #$05
 	LDA ObjFrameCounter
 	AND #$08
-	BEQ bra8_8320
+	BEQ bra8_8320 ;Alternate between Koopa frames 5 and 6 every 8 frames
 	INY
+
 bra8_8320:
 	TYA
-	STA EnemyAnimFrame,X
+	STA EnemyAnimFrame,X ;Set animation frame
 	RTS
 
 ;----------------------------------------
@@ -271,9 +248,9 @@ bra8_838B:
 	JMP jmp_54_B5BB
 	RTS
 bra8_8394:
-	JSR sub8_83D0
+	JSR GenObj_Paratroopa
 	LDA ObjectSlot,X
-	BMI bra8_83B6
+	BMI bra8_83B6 ;Branch if paratroopa is vertical
 	LDA FrameCount
 	AND #$03
 	BNE bra8_83A7
@@ -306,316 +283,188 @@ bra8_83CB:
 	STA EnemyAnimFrame,X
 	RTS
 
-sub8_83D0:
+;----------------------------------------
+;SUBROUTINE ($83D0)
+;Generic code for all paratroopas
+;----------------------------------------
+GenObj_Paratroopa:
 	LDA #$04
 	STA $25
 	LDX $A4 ;Get index of current object
-	Obj_DistCalc bra8_843A
+	Obj_DistCalc Paratroopa_GetFunction
 
-bra8_843A:
+Paratroopa_GetFunction:
 	LDA ObjectState,X
-	AND #$1F
+	AND #%00011111 ;Mask out upper 3 bits
 	ASL
-	TAY
-	LDA tbl8_844E,Y
+	TAY ;Get index for object's state
+	LDA FuncTbl_Paratroopa,Y
 	STA $32
-	LDA tbl8_844E+1,Y
-	STA $33
+	LDA FuncTbl_Paratroopa+1,Y
+	STA $33 ;Load function pointer
 	JMP ($32)
-tbl8_844E:
+FuncTbl_Paratroopa:
 	dw Obj_YoshiTongueCheck
 	dw ptr_AA7B
 	dw Obj_PowerupEatCheck
-	dw ptr3_8458
-	dw ptr3_847B
-ptr3_8458:
-	JSR Obj_PlayerHitCheck
-	JSR Obj_KillOnSpinJump
+	dw Paratroopa_HitCheck
+	dw Paratroopa_HitRespond
+
+Paratroopa_HitCheck:
+	JSR Obj_PlayerHitCheck ;Check for collision with player
+	JSR Obj_KillOnSpinJump ;Kill if spin jumped on
 	LDA InvincibilityTimer
 	CMP #$F7
-	BCS bra8_847A_RTS
-	JSR sub_54_BCA7
-	LDX $A4
-	LDA ObjectSlot,X
-	AND #$01
-	CLC
-	ADC #$36
-	STA ObjectSlot,X
-	LDA #$00
-	STA ObjectState,X
-bra8_847A_RTS:
+	BCS @Stop ;Only continue if the player's invincibility is about to end
+		JSR Obj_StompReboundAlt ;The player must be stomping on it if the code reached this point, so knock them back
+		LDX $A4 ;Get current object's slot
+		LDA ObjectSlot,X
+		AND #$01 ;Get paratroopa's CHR slot
+		CLC
+		ADC #objID_GreenKoopa
+		STA ObjectSlot,X ;Turn into green Koopa with same CHR slot
+		LDA #$00
+		STA ObjectState,X ;Clear state
+@Stop:
 	RTS
-ptr3_847B:
-	LDX $A4
-	LDA #$04
-	STA ObjectSlot,X
+
+;This is only used when the Paratroopa is killed completely
+Paratroopa_HitRespond:
+	LDX $A4 ;Get current object's slot
+	LDA #objID_Shell
+	STA ObjectSlot,X ;Replace current object with shell
 	LDA #$00
-	STA ObjectVariables,X
+	STA ObjectVariables,X ;Clear object's variables
 	RTS
+
+;----------------------------------------
+;REX OBJECT CODE ($8488)
+;----------------------------------------
 Obj_h16:
-	LDX $A4
+	LDX $A4 ;Get index for current object
 	LDA ObjectVariables,X
-	BPL bra8_84F7
-	LDA ObjectXPos,X
-	SEC
-	SBC PlayerXPosDup
-	STA ObjectXDistance,X
-	LDA ObjectXScreen,X
-	SBC PlayerXScreenDup
-	STA ObjXScreenDistance,X
-	STA $28
-	BEQ bra8_84AB
-	CMP #$FF
-	BEQ bra8_84AB
-	JMP Obj_RemoveObject ;unlogged
-bra8_84AB:
-	LDA ObjectYPos,X
-	SEC
-	SBC PlayerYPosDup
-	STA ObjectYDistance,X
-	LDA ObjectYScreen,X
-	SBC PlayerYScreenDup
-	STA ObjYScreenDistance,X
-	LDA PlayerYScreenDup
-	CMP ObjectYScreen,X
-	BEQ bra8_84ED
-	LDA ObjYScreenDistance,X
-	BPL bra8_84DC
-	LDA ObjectYDistance,X ;unlogged
-	CLC ;unlogged
-	ADC #$10 ;unlogged
-	STA ObjectYDistance,X ;unlogged
-	LDA ObjYScreenDistance,X ;unlogged
-	ADC #$00 ;unlogged
-	STA ObjYScreenDistance,X ;unlogged
-	JMP loc8_84ED ;unlogged
-bra8_84DC:
-	LDA ObjectYDistance,X
-	SEC
-	SBC #$10
-	STA ObjectYDistance,X
-	LDA ObjYScreenDistance,X
-	SBC #$00
-	STA ObjYScreenDistance,X
-bra8_84ED:
-loc8_84ED:
-	LDA FreezeFlag
-	BEQ bra8_84F3
-	RTS ;unlogged
-bra8_84F3:
-	JMP jmp_54_B5BB
-	RTS
-bra8_84F7:
+	BPL Rex_Init
+		Obj_DistCalc Rex_TurnAround
+	Rex_TurnAround:
+		JSR jmp_54_B5BB ;Turn in the direction of the player if upper bit of variable is set? Seems to be unused
+		RTS
+
+Rex_Init:
 	LDA #$06
-	STA $25
-	LDX $A4
-	LDA ObjectXPos,X
-	SEC
-	SBC PlayerXPosDup
-	STA ObjectXDistance,X
-	LDA ObjectXScreen,X
-	SBC PlayerXScreenDup
-	STA ObjXScreenDistance,X
-	STA $28
-	BEQ bra8_8519
-	CMP #$FF
-	BEQ bra8_8519
-	JMP Obj_RemoveObject
-bra8_8519:
-	LDA ObjectYPos,X
-	SEC
-	SBC PlayerYPosDup
-	STA ObjectYDistance,X
-	LDA ObjectYScreen,X
-	SBC PlayerYScreenDup
-	STA ObjYScreenDistance,X
-	LDA PlayerYScreenDup
-	CMP ObjectYScreen,X
-	BEQ bra8_855B
-	LDA ObjYScreenDistance,X
-	BPL bra8_854A
-	LDA ObjectYDistance,X ;unlogged
-	CLC ;unlogged
-	ADC #$10 ;unlogged
-	STA ObjectYDistance,X ;unlogged
-	LDA ObjYScreenDistance,X ;unlogged
-	ADC #$00 ;unlogged
-	STA ObjYScreenDistance,X ;unlogged
-	JMP loc8_855B ;unlogged
-bra8_854A:
-	LDA ObjectYDistance,X
-	SEC
-	SBC #$10
-	STA ObjectYDistance,X
-	LDA ObjYScreenDistance,X
-	SBC #$00
-	STA ObjYScreenDistance,X
-bra8_855B:
-loc8_855B:
-	LDA FreezeFlag
-	BEQ bra8_8561
-	RTS ;unlogged
-bra8_8561:
+	STA $25 ;Swallow when eaten
+	LDX $A4 ;Get index for object
+	Obj_DistCalc Rex_GetFunction
+Rex_GetFunction:
 	LDA ObjectState,X
-	AND #$1F
+	AND #%00011111 ;Mask out upper 3 bits for function number
 	ASL
-	TAY
+	TAY ;Get function index
 	LDA tbl8_8575,Y
 	STA $32
 	LDA tbl8_8575+1,Y
-	STA $33
+	STA $33 ;Load function pointer
 	JMP ($32)
 tbl8_8575:
 	dw Obj_YoshiTongueCheck
 	dw ptr_AA7B
 	dw Obj_PowerupEatCheck
 	dw ptr3_857F
-	dw ptr_AD88
+	dw Obj_FlipKill
+
 ptr3_857F:
-	LDY #$13
+	LDY #$13 ;Use normal Rex movement by default
 	LDA ObjectSlot,X
-	CMP #$18
-	BCC bra8_8589
-	INY
+	CMP #objID_RexSquashed
+	BCC bra8_8589 ;Branch if Rex isn't already squished
+		INY ;Move faster if Rex is squished
+
 bra8_8589:
-	STY $25
+	STY $25 ;Store movement data ID
 	LDA FrameCount
-	AND #$00
-	BNE bra8_8596
+	AND #%00000000
+	BNE bra8_8596 ;Get the movement data every frame? (Possibly a bug)
 	LDA $25
-	JSR GetMovementData
+	JSR GetMovementData ;Get movement data for Rex
+
 bra8_8596:
-	JSR Obj_CapeHitCheck
-	JSR Obj_PlayerHitCheck
-	JSR Obj_KillOnSpinJump
+	JSR Obj_CapeHitCheck ;Kill if hit by cape
+	JSR Obj_PlayerHitCheck ;Check for collision with player
+	JSR Obj_KillOnSpinJump ;Kill if spin-jumped on
 	LDA ObjectSlot,X
-	LSR
-	CMP #$0C
-	BCC bra8_85B5
-	LDA #$0F
-	STA ObjectSlot,X
-	LDA #$00
-	STA ObjectState,X
-	JMP jmp_54_BCC2
-	RTS
+	LSR ;Ignore lower bit of Rex ID
+	CMP #objID_RexSquashed/2
+	BCC bra8_85B5 ;Branch if Rex isn't already squished
+	;If Rex was already squished:
+		LDA #objID_Pop
+		STA ObjectSlot,X ;Make Rex pop
+		LDA #$00
+		STA ObjectState,X ;Start at default function
+		JMP Obj_StompReboundNoSFX ;Make player bounce off the Rex without playing a sound
+		RTS
+
 bra8_85B5:
-	LDA #$10
-	BMI bra8_85D2
-	CLC
-	ADC ObjectYPos,X
-	STA ObjectYPos,X
-	BCS bra8_85C6
-	CMP #$F0
-	BCC bra8_85E4
-bra8_85C6:
-	CLC ;unlogged
-	ADC #$10 ;unlogged
-	STA ObjectYPos,X ;unlogged
-	INC ObjectYScreen,X ;unlogged
-	JMP loc8_85E4 ;unlogged
-bra8_85D2:
-	CLC ;unlogged
-	ADC ObjectYPos,X ;unlogged
-	STA ObjectYPos,X ;unlogged
-	BCS bra8_85E4 ;unlogged
-	SEC ;unlogged
-	SBC #$10 ;unlogged
-	STA ObjectYPos,X ;unlogged
-	DEC ObjectYScreen,X ;unlogged
-bra8_85E4:
+	Obj_VertOffset 16,loc8_85E4 ;Position the squished Rex 16 pixels lower
+
+;Calculate horizontal distance between the squished Rex and player
 loc8_85E4:
-	LDA ObjectXPos,X
-	SEC
-	SBC PlayerXPosDup
-	STA ObjectXDistance,X
-	LDA ObjectXScreen,X
-	SBC PlayerXScreenDup
-	STA ObjXScreenDistance,X
-	STA $28
-	BEQ bra8_8600
-	CMP #$FF
-	BEQ bra8_8600
-	JMP Obj_RemoveObject ;unlogged
-bra8_8600:
-	LDA ObjectYPos,X
-	SEC
-	SBC PlayerYPosDup
-	STA ObjectYDistance,X
-	LDA ObjectYScreen,X
-	SBC PlayerYScreenDup
-	STA ObjYScreenDistance,X
-	LDA PlayerYScreenDup
-	CMP ObjectYScreen,X
-	BEQ bra8_8642
-	LDA ObjYScreenDistance,X ;unlogged
-	BPL bra8_8631 ;unlogged
-	LDA ObjectYDistance,X ;unlogged
-	CLC ;unlogged
-	ADC #$10 ;unlogged
-	STA ObjectYDistance,X ;unlogged
-	LDA ObjYScreenDistance,X ;unlogged
-	ADC #$00 ;unlogged
-	STA ObjYScreenDistance,X ;unlogged
-	JMP loc8_8642 ;unlogged
-bra8_8631:
-	LDA ObjectYDistance,X ;unlogged
-	SEC ;unlogged
-	SBC #$10 ;unlogged
-	STA ObjectYDistance,X ;unlogged
-	LDA ObjYScreenDistance,X ;unlogged
-	SBC #$00 ;unlogged
-	STA ObjYScreenDistance,X ;unlogged
-bra8_8642:
-loc8_8642:
-	LDA FreezeFlag
-	BEQ bra8_8648
-	RTS ;unlogged
+	Obj_DistCalc bra8_8648
+
 bra8_8648:
 	INC ObjectSlot,X
-	INC ObjectSlot,X
+	INC ObjectSlot,X ;Make Rex squished
 	LDA #$00
-	STA ObjectState,X
-	JMP Obj_StompKnockback
+	STA ObjectState,X ;Clear object's state
+	JMP Obj_StompRebound ;Make player bounce off the Rex
 	RTS
+
+;----------------------------------------
+;REX & SQUISHED REX GRAPHICAL CODE ($8657, $865B)
+;Sprite loading code used by both variants of the Rex
+;----------------------------------------
 ptr6_8657:
 	LDY #$00
-	BEQ bra8_865F
+	BEQ bra8_865F ;Start from frame 0 for normal Rex
+
 ptr6_865B:
 	LDX $A4
-	LDY #$03
+	LDY #$03 ;Use squished frames for squished Rex
+
 bra8_865F:
 	LDA ObjFrameCounter
 	AND #$08
-	BEQ bra8_8667
+	BEQ bra8_8667 ;Alternate between walking sprites every 8 frames
 	INY
+
 bra8_8667:
 	TYA
 	ASL
-	TAX
-	LDA RexMappings,X
+	TAX ;Get pointer index for current sprite
+	LDA SprMapTbl_Rex,X
 	STA $32
-	LDA RexMappings+1,X
-	STA $33
-	LDY #$80
+	LDA SprMapTbl_Rex+1,X
+	STA $33 ;Load sprite pointer
+	LDY #$80 ;Use bank 2 by default
 	LDX $A4
 	LDA ObjectSlot,X
 	AND #$01
 	BEQ bra8_8681
-	LDY #$C0
+		LDY #$C0 ;Use bank 3 if lower bit of ID is set
+
 bra8_8681:
 	STY $36
 	LDA ObjectState,X
 	AND #%01000000
-	STA ObjectAttributes ;Get/use the horizontal mirroring bit
+	STA ObjectAttributes ;Store object's horizontal direction
 	JMP jmp_54_A118
 	RTS
-RexMappings:
-	dw RexWalk1
-	dw RexWalk2
-	dw RexFlattened ;Unused
-	dw RexSquishWalk1
-	dw RexSquishWalk2
-RexWalk1:
+
+SprMapTbl_Rex:
+	dw SprMap_Rex_Walk1
+	dw SprMap_Rex_Walk2
+	dw SprMap_Rex_Flattened ;Unused
+	dw SprMap_RexSquished_Walk1
+	dw SprMap_RexSquished_Walk2
+SprMap_Rex_Walk1:
 	db $03
 	db $04
 	db $95
@@ -623,7 +472,7 @@ RexWalk1:
 	db $25, $26, $FF
 	db $29, $2A, $2B
 	db $33, $34, $35
-RexWalk2:
+SprMap_Rex_Walk2:
 	db $03
 	db $04
 	db $95
@@ -631,70 +480,31 @@ RexWalk2:
 	db $27, $28, $FF
 	db $2C, $2D, $2E
 	db $36, $37, $38
-RexFlattened:
+SprMap_Rex_Flattened:
 	db $02
 	db $01
 	db $95
 	db $39, $3A
-RexSquishWalk1:
+SprMap_RexSquished_Walk1:
 	db $02
 	db $02
 	db $95
 	db $2F, $30
 	db $3B, $3C
-RexSquishWalk2:
+SprMap_RexSquished_Walk2:
 	db $02
 	db $02
 	db $95
 	db $31, $32
 	db $3D, $3E
+
+;----------------------------------------
+;PIRANHA PLANT OBJECT CODE ($86CA)
+;----------------------------------------
 Obj_h1A:
 	LDX $A4
-	LDA ObjectXPos,X
-	SEC
-	SBC PlayerXPosDup
-	STA ObjectXDistance,X
-	LDA ObjectXScreen,X
-	SBC PlayerXScreenDup
-	STA ObjXScreenDistance,X
-	STA $28
-	BEQ bra8_86E8
-	CMP #$FF
-	BEQ bra8_86E8
-	JMP Obj_RemoveObject
-bra8_86E8:
-	LDA ObjectYPos,X
-	SEC
-	SBC PlayerYPosDup
-	STA ObjectYDistance,X
-	LDA ObjectYScreen,X
-	SBC PlayerYScreenDup
-	STA ObjYScreenDistance,X
-	LDA PlayerYScreenDup
-	CMP ObjectYScreen,X
-	BEQ loc8_872A
-	LDA ObjYScreenDistance,X
-	BPL bra8_8719
-	LDA ObjectYDistance,X ;unlogged
-	CLC ;unlogged
-	ADC #$10 ;unlogged
-	STA ObjectYDistance,X ;unlogged
-	LDA ObjYScreenDistance,X ;unlogged
-	ADC #$00 ;unlogged
-	STA ObjYScreenDistance,X ;unlogged
-	JMP loc8_872A ;unlogged
-bra8_8719:
-	LDA ObjectYDistance,X
-	SEC
-	SBC #$10
-	STA ObjectYDistance,X
-	LDA ObjYScreenDistance,X
-	SBC #$00
-	STA ObjYScreenDistance,X
-loc8_872A:
-	LDA FreezeFlag
-	BEQ bra8_8730
-	RTS ;unlogged
+	Obj_DistCalc bra8_8730 ;Calculate distance between Piranha Plant and player
+
 bra8_8730:
 	LDA ObjectVariables,X
 	BPL bra8_8776
@@ -788,7 +598,7 @@ tbl8_87F4:
 	dw ptr3_880D
 	dw ptr3_881C
 	dw ptr3_882B
-	dw ptr_AD88
+	dw Obj_FlipKill
 ptr3_87FE:
 	LDA FrameCount
 	AND #$03
@@ -859,7 +669,7 @@ bra8_8853:
 bra8_8874:
 	STY $36
 	LDA #$00
-	STA $05F0
+	STA ObjectAttributes
 	JMP jmp_54_A118
 	RTS
 tbl8_887F:
@@ -1132,12 +942,12 @@ tbl8_8A74:
 	dw ptr_AA7B
 	dw Obj_PowerupEatCheck
 	dw ptr3_8A7E
-	dw ptr_AD88
+	dw Obj_FlipKill
 ptr3_8A7E:
 	JSR Obj_CapeHitCheck
 	JSR Obj_PlayerHitCheck
 	JSR Obj_KillOnSpinJump
-	JSR Obj_StompKnockback
+	JSR Obj_StompRebound
 	LDX $A4
 	LDY #$01
 	LDA ObjectSlot,X
@@ -1193,7 +1003,7 @@ bra8_8AE3:
 	STY $36
 	LDA ObjectState,X
 	AND #$40
-	STA $05F0
+	STA ObjectAttributes
 	JMP jmp_54_A118
 	RTS
 tbl8_8AF1:
@@ -1476,7 +1286,7 @@ ptr6_8CDE:
 bra8_8D00:
 	STY $36
 	LDA #$00
-	STA $05F0
+	STA ObjectAttributes
 	JMP jmp_54_A118
 	RTS
 tbl8_8D0B:
@@ -1673,7 +1483,7 @@ bra8_8E21:
 bra8_8E3B:
 	STY $36
 	LDA #$00
-	STA $05F0
+	STA ObjectAttributes
 	JMP jmp_54_A118
 	RTS
 tbl8_8E46:
@@ -1759,7 +1569,7 @@ bra8_8ED8_RTS:
 bra8_8ED9:
 	CMP #$81
 	BNE bra8_8EE5
-	LDA #sfx_Thunder?
+	LDA #sfx_Swooper
 	STA SFXRegister
 	JMP jmp_54_B5BB
 	RTS
@@ -1831,7 +1641,7 @@ tbl8_8F67:
 	dw ptr_AA7B
 	dw Obj_PowerupEatCheck
 	dw ptr3_8F71
-	dw ptr_AD88
+	dw Obj_FlipKill
 ptr3_8F71:
 	LDA FrameCount
 	AND #$00
@@ -1842,7 +1652,7 @@ bra8_8F7C:
 	JSR Obj_CapeHitCheck
 	JSR Obj_PlayerHitCheck
 	JSR Obj_KillOnSpinJump
-	JSR Obj_StompKnockback
+	JSR Obj_StompRebound
 	LDX $A4
 	LDA #$82
 	STA ObjectVariables,X
@@ -1880,7 +1690,7 @@ bra8_8FC5:
 	STY $36
 	LDA ObjectState,X
 	AND #$40
-	STA $05F0
+	STA ObjectAttributes
 	JMP jmp_54_A118
 	RTS
 tbl8_8FD3:
@@ -2035,7 +1845,7 @@ tbl8_90E1:
 	dw ptr_AA7B
 	dw Obj_PowerupEatCheck
 	dw ptr3_90EB
-	dw ptr_AD88
+	dw Obj_FlipKill
 ptr3_90EB:
 	LDA ObjectSlot,X
 	AND #$FE
@@ -2073,7 +1883,7 @@ bra8_912B:
 	LDA ObjectState,X
 	AND #$40
 bra8_9130:
-	STA $05F0
+	STA ObjectAttributes
 	LDA ObjFrameCounter
 	AND #$04
 	BEQ bra8_913B
@@ -2325,7 +2135,7 @@ tbl8_9305:
 	dw ptr_AA7B
 	dw Obj_PowerupEatCheck
 	dw ptr3_930F
-	dw ptr_AD88
+	dw Obj_FlipKill
 ptr3_930F:
 	LDA FrameCount
 	AND #$00
@@ -2335,7 +2145,7 @@ ptr3_930F:
 bra8_931A:
 	JSR Obj_PlayerHitCheck
 	JSR Obj_KillOnSpinJump
-	JSR Obj_StompKnockback
+	JSR Obj_StompRebound
 	LDA ObjectVariables,X
 	AND #$06
 	LSR
@@ -2377,7 +2187,7 @@ bra8_936A:
 	STY $36
 	LDA ObjectState,X
 	AND #$40
-	STA $05F0
+	STA ObjectAttributes
 loc8_9374:
 	LDA $06E1
 	PHA
@@ -2559,7 +2369,7 @@ tbl8_94A1:
 	dw ptr_AA7B
 	dw Obj_PowerupEatCheck
 	dw ptr3_94B1
-	dw ptr_AD88
+	dw Obj_FlipKill
 	dw ptr3_9564
 	dw ptr_AD79
 	dw ptr3_959C
@@ -2743,7 +2553,7 @@ bra8_95F6:
 	STA ObjectState,X
 bra8_960A:
 	AND #$40
-	STA $05F0
+	STA ObjectAttributes
 	JMP loc8_9374
 tbl8_9612:
 	dw StunMechakoopa1
@@ -3060,11 +2870,11 @@ tbl8_9834:
 	dw ptr_AA7B
 	dw Obj_PowerupEatCheck
 	dw ptr3_983E
-	dw ptr_AD88
+	dw Obj_FlipKill
 ptr3_983E:
 	JSR Obj_CapeHitCheck
 	JSR Obj_PlayerHitCheck
-	JSR jmp_54_BCC2
+	JSR Obj_StompReboundNoSFX
 	LDA #$04
 	STA PlayerAction
 	LDA #$0F

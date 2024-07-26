@@ -3,7 +3,7 @@ Switch_P1:
 	.byte Transpose, 0
 	.byte DutySet, $38
 	.byte PitchSet, $05
-	.byte VolSet, $29
+	.byte VolSet, $1C
 	.byte NLen+1
 	.byte SongLoop,3
 	.byte D5

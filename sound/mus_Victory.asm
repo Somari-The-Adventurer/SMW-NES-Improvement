@@ -1,258 +1,287 @@
 Victory_P1:
-	.byte SongSpeed, 1
-	.byte Transpose, 5
-	.byte DutySet, $38
-	.byte PitchSet, $00
-	.byte VolSet, $28
-	.byte SegCall
-	.word Victory_Sweep
-	.byte Transpose, $00
-	.byte DutySet, $3D
-	.byte PitchSet, $00
-	.byte VolSet, $3B
-	.byte SegCall
-	.word Overworld_P1Sub3
-	.byte $FF
+	db SongSpeed, 1
+	db Transpose, 5
+	db DutySet, $38
+	db PitchSet, $00
+	db VolSet, $18
+	db SegCall
+	dw Victory_Sweep
+	db Transpose, $00
+	db DutySet, $3D
+	db PitchSet, $00
+	db VolSet, $3B
+	db SegCall
+	dw Overworld_P1Sub3
+	db $FF
 Victory_P2:
-	.byte Transpose, 0
-	.byte DutySet, $38
-	.byte PitchSet, $00
-	.byte VolSet, $28
-	.byte SegCall
-	.word Victory_Sweep
-	.byte Transpose, $0C
-	.byte DutySet, $3D
-	.byte PitchSet, $7A
-	.byte VolSet, $3E
-	.byte NLen+11
-	.byte F3
-	.byte NLen+16
-	.byte NRest
-	.byte NLen+11
-	.byte F3
-	.byte NLen+16
-	.byte NRest
-	.byte NLen+6
-	.byte D3
-	.byte NLen+7
-	.byte NRest
-	.byte NLen+18
-	.byte F3
-	.byte NLen+9
-	.byte NRest
-	.byte NLen+7
-	.byte D3
-	.byte NRest
-	.byte NLen+11
-	.byte F3
-	.byte NLen+2
-	.byte NRest
-	.byte NLen+7
-	.byte D3
-	.byte NRest
-	.byte NLen+6
-	.byte C3
-	.byte NLen+7
-	.byte NRest
-	.byte NLen+44
-	.byte F3
-	.byte NLen+10
-	.byte NRest
-	.byte NLen+7
-	.byte D3
-	.byte NRest
-	.byte NLen+11
-	.byte C4
-	.byte NLen+2
-	.byte NRest
-	.byte NLen+7
-	.byte D4
-	.byte NRest
-	.byte NLen+6
-	.byte C4
-	.byte NLen+7
-	.byte NRest
-	.byte D4
-	.byte NRest
-	.byte NLen+11
-	.byte C4
-	.byte NLen+9
-	.byte NRest
-	.byte NLen+4
-	.byte C3
-	.byte NLen+3
-	.byte NRest
-	.byte NLen+4
-	.byte A#3
-	.byte NLen+2
-	.byte NRest
-	.byte NLen+5
-	.byte A3
-	.byte NLen+2
-	.byte NRest
-	.byte NLen+11
-	.byte G3
-	.byte NLen+3
-	.byte NRest
-	.byte NLen+45
-	.byte F3
-	.byte NLen+36
-	.byte NRest
-	.byte NLen+11
-	.byte F4
-	.byte NLen+16
-	.byte NRest
-	.byte $FF
+	db Transpose, 0
+	db DutySet, $38
+	db PitchSet, $00
+	db VolSet, $18
+	db SegCall
+	dw Victory_Sweep
+	db Transpose, $0C
+	db DutySet, $3D
+	db PitchSet, $0F
+	db VolSet, $3E
+	db NLen+11
+	db F3
+	db NLen+16
+	db NRest
+	db NLen+11
+	db F3
+	db NLen+16
+	db NRest
+	db NLen+6
+	db D3
+	db NLen+7
+	db NRest
+	db NLen+18
+	db F3
+	db NLen+9
+	db NRest
+	db NLen+7
+	db D3
+	db NRest
+	db NLen+11
+	db F3
+	db NLen+2
+	db NRest
+	db NLen+7
+	db D3
+	db NRest
+	db NLen+6
+	db C3
+	db NLen+7
+	db NRest
+	db NLen+44
+	db F3
+	db NLen+10
+	db NRest
+	db NLen+7
+	db D3
+	db NRest
+	db NLen+11
+	db C4
+	db NLen+2
+	db NRest
+	db NLen+7
+	db D4
+	db NRest
+	db NLen+6
+	db C4
+	db NLen+7
+	db NRest
+	db D4
+	db NRest
+	db NLen+11
+	db C4
+	db NLen+9
+	db NRest
+	db NLen+4
+	db C3
+	db NLen+3
+	db NRest
+	db NLen+4
+	db A#3
+	db NLen+2
+	db NRest
+	db NLen+5
+	db A3
+	db NLen+2
+	db NRest
+	db NLen+11
+	db G3
+	db NLen+3
+	db NRest
+	db NLen+45
+	db F3
+	db NLen+36
+	db NRest
+	db NLen+11
+	db F4
+	db NLen+16
+	db NRest
+	db $FF
 Victory_Sweep:
-	.byte NLen+1
-	.byte C#3
-	.byte F#3
-	.byte B3
-	.byte E4
-	.byte A4
-	.byte D5
-	.byte G5
-	.byte NLen+2
-	.byte C6
-	.byte B5
-	.byte A#5
-	.byte A5
-	.byte G#5
-	.byte G5
-	.byte F#5
-	.byte F5
-	.byte E5
-	.byte D#5
-	.byte D5
-	.byte C#5
-	.byte C5
-	.byte B4
-	.byte A#4
-	.byte A4
-	.byte G#4
-	.byte G4
-	.byte F#4
-	.byte F4
-	.byte E4
-	.byte D#4
-	.byte D4
-	.byte NLen+1
-	.byte C#4
-	.byte SegEnd
+	db NLen+1
+	db C#3
+	db F#3
+	db B3
+	db E4
+	db A4
+	db D5
+	db G5
+	db NLen+2
+	db C6
+	db B5
+	db A#5
+	db A5
+	db G#5
+	db G5
+	db F#5
+	db F5
+	db E5
+	db D#5
+	db D5
+	db C#5
+	db C5
+	db B4
+	db A#4
+	db A4
+	db G#4
+	db G4
+	db F#4
+	db F4
+	db E4
+	db D#4
+	db D4
+	db NLen+1
+	db C#4
+	db SegEnd
 Victory_Tri:
-	.byte Transpose, $0C
-	.byte DutySet, $3D
-	.byte PitchSet, $7A
-	.byte VolSet, $3E
-	.byte NLen+54
-	.byte NRest
-	.byte NLen+11
-	.byte A3
-	.byte NLen+16
-	.byte NRest
-	.byte NLen+11
-	.byte A3
-	.byte NLen+16
-	.byte NRest
-	.byte NLen+6
-	.byte F3
-	.byte NLen+7
-	.byte NRest
-	.byte NLen+18
-	.byte A3
-	.byte NLen+9
-	.byte NRest
-	.byte NLen+7
-	.byte F3
-	.byte NRest
-	.byte NLen+11
-	.byte A3
-	.byte NLen+2
-	.byte NRest
-	.byte NLen+7
-	.byte F3
-	.byte NRest
-	.byte NLen+6
-	.byte F3
-	.byte NLen+7
-	.byte NRest
-	.byte NLen+44
-	.byte A3
-	.byte NLen+10
-	.byte NRest
-	.byte NLen+7
-	.byte F3
-	.byte NRest
-	.byte NLen+11
-	.byte E4
-	.byte NLen+2
-	.byte NRest
-	.byte NLen+7
-	.byte F4
-	.byte NRest
-	.byte NLen+6
-	.byte E4
-	.byte NLen+7
-	.byte NRest
-	.byte F4
-	.byte NRest
-	.byte NLen+11
-	.byte E4
-	.byte NLen+9
-	.byte NRest
-	.byte NLen+4
-	.byte E3
-	.byte NLen+3
-	.byte NRest
-	.byte NLen+4
-	.byte D4
-	.byte NLen+2
-	.byte NRest
-	.byte NLen+5
-	.byte C4
-	.byte NLen+2
-	.byte NRest
-	.byte NLen+11
-	.byte A#3
-	.byte NLen+3
-	.byte NRest
-	.byte NLen+45
-	.byte A3
-	.byte NLen+36
-	.byte NRest
-	.byte NLen+11
-	.byte A4
-	.byte NLen+16
-	.byte NRest
-	.byte $FF
+	db Transpose, $0C
+	db DutySet, $3D
+	db PitchSet, $0F
+	db VolSet, $3E
+	db NLen+54
+	db NRest
+	db NLen+11
+	db A3
+	db NLen+16
+	db NRest
+	db NLen+11
+	db A3
+	db NLen+16
+	db NRest
+	db NLen+6
+	db F3
+	db NLen+7
+	db NRest
+	db NLen+18
+	db A3
+	db NLen+9
+	db NRest
+	db NLen+7
+	db F3
+	db NRest
+	db NLen+11
+	db A3
+	db NLen+2
+	db NRest
+	db NLen+7
+	db F3
+	db NRest
+	db NLen+6
+	db F3
+	db NLen+7
+	db NRest
+	db NLen+44
+	db A3
+	db NLen+10
+	db NRest
+	db NLen+7
+	db F3
+	db NRest
+	db NLen+11
+	db E4
+	db NLen+2
+	db NRest
+	db NLen+7
+	db F4
+	db NRest
+	db NLen+6
+	db E4
+	db NLen+7
+	db NRest
+	db F4
+	db NRest
+	db NLen+11
+	db E4
+	db NLen+9
+	db NRest
+	db NLen+4
+	db E3
+	db NLen+3
+	db NRest
+	db NLen+4
+	db D4
+	db NLen+2
+	db NRest
+	db NLen+5
+	db C4
+	db NLen+2
+	db NRest
+	db NLen+11
+	db A#3
+	db NLen+3
+	db NRest
+	db NLen+45
+	db A3
+	db NLen+36
+	db NRest
+	db NLen+11
+	db A4
+	db NLen+16
+	db NRest
+	db $FF
+Victory_Noise:
+	db PitchSet, 0
+	db VolSet, 0
+	db NLen+54
+	db NRest
+	db SegCall
+	dw Overworld_NoiseSub1
+	db SegCall
+	dw Overworld_NoiseSub2
+	db SegCall
+	dw Overworld_NoiseSub2
+	db SegCall
+	dw Overworld_NoiseSub1
+	db SegCall
+	dw Overworld_NoiseSub2
+	db NLen+27
+	db $3B
+	db SegCall
+	dw Overworld_NoiseSub1
+	db SegCall
+	dw Overworld_NoiseSub2
+	db SegCall
+	dw Overworld_NoiseSub2
+	db SegCall
+	dw Overworld_NoiseSub1
+	db NLen+27
+	db $39
+	db $39
+	db $FF
 Victory_DPCM:
-	.byte NLen+54
-	.byte NRest
-	.byte SongLoop,8
-	.byte SegCall
-	.word Overworld_DPCMFMajor
-	.byte SongLoopEnd
-	.byte NLen+108
-	.byte C5Minor7LongDown
-	.byte SegCall
-	.word Overworld_DPCMFMajor
-	.byte SegCall
-	.word Overworld_DPCMFMajor
-	.byte NLen+27
-	.byte FMajorDown
-	.byte FMajorDown
-	.byte $FF
+	db NLen+54
+	db NRest
+	db SongLoop,8
+	db SegCall
+	dw Overworld_DPCMFMajor
+	db SongLoopEnd
+	db NLen+108
+	db C5Minor7LongDown
+	db SegCall
+	dw Overworld_DPCMFMajor
+	db SegCall
+	dw Overworld_DPCMFMajor
+	db NLen+27
+	db FMajorDown
+	db FMajorDown
+	db $FF
 Victory_End:
 	db $FF
 Victory_Footer:
 	db NRest
-	.word Victory_P1
+	dw Victory_P1
 	db $01
-	.word Victory_P2
+	dw Victory_P2
 	db $02
-	.word Victory_Tri
-	.byte $03
-	.word Victory_End
-	.byte $04
-	.word Victory_DPCM
+	dw Victory_Tri
+	db $03
+	dw Victory_End
+	db $04
+	dw Victory_DPCM
 	db $FF

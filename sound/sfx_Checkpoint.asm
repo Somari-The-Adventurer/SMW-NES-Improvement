@@ -2,9 +2,9 @@ Checkpoint_P1:
 	.byte SongSpeed, 1
 	.byte Transpose, 18
 	.byte DutySet, $38
-	.byte PitchSet, $3F
+	.byte PitchSet, $0F
 	.byte SongSweep, $9B
-	.byte VolSet, $29
+	.byte VolSet, $1C
 	.byte NLen+1
 	.byte C4
 	.byte F4

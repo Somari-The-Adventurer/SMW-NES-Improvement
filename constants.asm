@@ -24,7 +24,7 @@ sfx_PowerDown = $0C
 sfx_YoshiMount = $0D
 sfx_Feather = $0E
 sfx_Thud = $0F
-sfx_Thunder? = $10
+sfx_Explosion = $10
 sfx_EnemyHit1 = $11
 sfx_EnemyHit2 = $12
 sfx_EnemyHit3 = $13
@@ -33,17 +33,21 @@ sfx_EnemyHit5 = $15
 sfx_EnemyHit6 = $16
 sfx_EnemyHit7 = $17
 sfx_EnemyHit8 = $18
-sfx_YoshiTongue = $19
-sfx_YoshiSwallow = $1A
-sfx_YoshiFireSpit = $1B
-sfx_Checkpoint = $1C
-sfx_Cutter = $1D
-sfx_HitBlock = $1E
-sfx_FireBall = $1F
-sfx_Switch = $20
-sfx_DryBones = $21
-sfx_Spring = $22
-sfx_Thwomp = $23
+sfx_YoshiTongue = $1A
+sfx_YoshiSwallow = $1B
+sfx_YoshiFireSpit = $1C ; TODO
+sfx_Checkpoint = $1D
+sfx_Chainsaw = $1E
+sfx_HitBlock = $1F
+sfx_FireBall = $20
+sfx_Switch = $21
+sfx_DryBones = $22
+sfx_Spring = $23
+sfx_Thwomp = $24
+sfx_Swooper = $25
+sfx_BossHit = $26
+sfx_ChuckHit = $27
+sfx_Vine = $28
 
 ;Music IDs
 mus_Title = $40
@@ -63,6 +67,7 @@ mus_Underwater = $4D
 mus_Silence = $4E
 mus_Ending = $4F
 mus_InvincibleStar = $50
+mus_Athletic = $51
 
 ;Music notes
 NRest = $00
@@ -158,6 +163,8 @@ SongSweep = $f7
 VolSet = $F8
 DutySet = $F9
 PitchSet = $FA
+SongLoopVerb = $FB ; verbose loop
+NLenAdd = $FC
 
 ; DMC Bank $28
 .enum 0
@@ -306,18 +313,40 @@ YOSHI1_END:
 YOSHI2:		.dsb $2d
 YOSHI2_END:
 	.dsb 3
-SWIM:		.dsb $4a
-SWIM_END:
-	.dsb 2
+POWER_SNARE:	.dsb $4b
+POWER_SNARE_END:
+	.dsb 1
 KICK_DRUM:	.dsb $d
 KICK_DRUM_END:
 	.dsb 3
 .ende
 ; DMC Bank $2D
 .enum $e0
-POWER_SNARE:	.dsb $4b
-POWER_SNARE_END:
+GH_AMBIENCE_1:	.dsb $1b
+GH_AMBIENCE_1_END:
+GH_AMBIENCE_1_END2 = GH_AMBIENCE_1_END - 7
 	.dsb 1
+
+GH_AMBIENCE_2:	.dsb $1b
+GH_AMBIENCE_2_END:
+GH_AMBIENCE_2_END2 = GH_AMBIENCE_2_END - 7
+	.dsb 1
+
+GH_AMBIENCE_3:	.dsb $1c
+GH_AMBIENCE_3_END:
+GH_AMBIENCE_3_END2 = GH_AMBIENCE_3_END - 7
+
+GH_AMBIENCE_4:	.dsb $1c
+GH_AMBIENCE_4_END:
+GH_AMBIENCE_4_END2 = GH_AMBIENCE_4_END - 7
+
+GH_AMBIENCE_5:	.dsb $1c
+GH_AMBIENCE_5_END:
+GH_AMBIENCE_5_END2 = GH_AMBIENCE_5_END - 7
+
+GH_AMBIENCE_6:	.dsb $1c
+GH_AMBIENCE_6_END:
+GH_AMBIENCE_6_END2 = GH_AMBIENCE_6_END - 7
 .ende
 
 .enum 1

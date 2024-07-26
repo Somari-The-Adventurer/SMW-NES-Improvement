@@ -3,7 +3,7 @@ Ending_P1Loop:
 	.byte SongSpeed, 2
 	.byte Transpose, $0C
 	.byte DutySet, $07
-	.byte PitchSet, $39
+	.byte PitchSet, $00
 	.byte VolSet, $11
 	.byte $A4
 	.byte C3
@@ -200,7 +200,7 @@ Ending_Tri:
 Ending_TriLoop:
 	.byte Transpose, $0C
 	.byte DutySet, $38
-	.byte PitchSet, $39
+	.byte PitchSet, $00
 	.byte VolSet, $41
 	.byte NLen+12
 	.byte C2

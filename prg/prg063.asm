@@ -340,13 +340,20 @@ loc3_E2BE:
 	JMP jmp_41_A000 ;Jump
 	RTS
 
-	.db $00,$00,$00 ; whited out code
-	.db $00,$00
-	.db $00,$00
-	.db $00,$00
-	.db $00,$00
-	.db $00,$00
-	.db $00,$00
+DoRevealSound:
+	LDA ObjectSlot,X
+	CMP #objID_Vine+1
+	BEQ @Vine
+	CMP #objID_Vine
+	BEQ @Vine
+	LDA #sfx_BlockRelease
+	BNE @Set
+@Vine:
+	LDA #sfx_Vine
+@Set:
+	STA SFXRegister
+	RTS
+
 VerifyEntryAtTableE329:
 	LDA a:Event
 	CMP #$16
@@ -357,32 +364,35 @@ VerifyEntryAtTableE329:
 	PLA
 	PLA
 	RTS
-;-----UNUSED CODE START-----
-;Seems to be an early routine for loading levels
-pnt2_E2E5:
-	LDA zInputBottleNeck
-	AND #btnA
-	BEQ bra3_E2FE ;If the A button is pressed,
-	INC LevelNumber ;Increment level number
-	LDA LevelNumber
-	CMP #$04 ;Check if level number is below 4,
-	BCC bra3_E2FE ;If it is, branch
-	LDA #$00 ;If it's above 4, continue
-	STA LevelNumber ;Clear level number
-	INC WorldNumber ;Carry over world number (1-5 would become 2-1)
-bra3_E2FE:
-	LDA zInputBottleNeck
-	AND #btnStart
-	BEQ bra3_E315 ;If start is pressed,
-	INC a:GameState ;Set game state to 'in level'
-	LDA #$00
-	STA a:Event ;Clear event triggers
-	LDA #$05
-	STA PalTransition
-	JMP sub3_F919 ;Jump
-bra3_E315:
+
+ParseVelocityCap:
+	PHA
+	LDA UnderwaterFlag
+	BNE @Walking
+	LDA zInputCurrentState
+	ORA zInputBottleNeck
+	AND #btnB
+	BEQ @Walking
+	PLA
+	CMP #$30
 	RTS
-pnt2_E316:
+@Walking:
+	PLA
+	CMP #$10
+	RTS
+
+GetVelocityCap:
+	LDA UnderwaterFlag
+	BNE @Walking
+	LDA zInputCurrentState
+	ORA zInputBottleNeck
+	AND #btnB
+	BNE @Running
+@Walking:
+	LDA #$10
+	RTS
+@Running:
+	LDA #$30
 	RTS
 
 loc3_E317:
@@ -738,7 +748,7 @@ sub3_E5D4:
 	STA $3C
 	JSR jmp_52_A080 ;Jump
 	JSR jmp_52_A089 ;Jump
-	JSR jmp_52_A000 ;Jump
+	JSR RenderItemBoxSprite ;Jump
 	JMP sub3_E9C4 ;Jump
 	RTS
 pnt2_E610:
@@ -960,7 +970,7 @@ pnt2_E7A2:
 	STA $3C
 	JSR jmp_52_A080 ;Jump
 	JSR jmp_52_A089 ;Jump
-	JSR jmp_52_A000 ;Jump
+	JSR RenderItemBoxSprite ;Jump
 	JMP sub3_E9C4 ;Jump
 	RTS
 pnt2_E7D0:
@@ -2003,7 +2013,7 @@ sub3_ED14:
 	STA $3C
 	JSR jmp_52_A080
 	JSR jmp_52_A089
-	JSR jmp_52_A000
+	JSR RenderItemBoxSprite
 	JMP sub3_E9C4 ;Jump
 	RTS
 sub3_ED48:
@@ -2084,12 +2094,12 @@ pnt2_EDE1:
 	JSR sub3_ED48
 	LDA #$00
 	STA UnderwaterFlag
-	LDA #$3D
+	LDA #61
 	STA M90_PRG1
-	LDA $A858
-	STA $00DC
-	LDA $A859
-	STA $00DD
+	LDA BonusEntitySet
+	STA a:$DC
+	LDA BonusEntitySet+1
+	STA a:$DD
 	LDA #$00
 	STA $06E1
 	RTS
@@ -2454,13 +2464,13 @@ sub3_F0CB:
 	STA MusicRegister ;Load/play music for level
 	RTS
 LevelMusic:
-	db mus_Overworld, mus_Overworld, mus_Title, mus_Castle ;World 1
-	db mus_Overworld, mus_Title, mus_GhostHouse, mus_Castle ;World 2
+	db mus_Overworld, mus_Overworld, mus_Athletic, mus_Castle ;World 1
+	db mus_Overworld, mus_Athletic, mus_GhostHouse, mus_Castle ;World 2
 	db mus_Underground, mus_Underwater, mus_GhostHouse, mus_Castle ;World 3
-	db mus_Overworld, mus_ForestofIllusion, mus_Title, mus_Castle ;World 4
+	db mus_Overworld, mus_Athletic, mus_Overworld, mus_Castle ;World 4
 	db mus_Overworld, mus_GhostHouse, mus_Underwater, mus_Castle ;World 5
-	db mus_Overworld, mus_GhostHouse, mus_ForestofIllusion, mus_Castle ;World 6
-	db mus_Overworld, mus_ForestofIllusion, mus_GhostHouse, mus_Castle ;World 7
+	db mus_Overworld, mus_GhostHouse, mus_Overworld, mus_Castle ;World 6
+	db mus_Overworld, mus_Athletic, mus_GhostHouse, mus_Castle ;World 7
 	db mus_Overworld ;Yoshi's House
 pnt2_F0F8:
 	LDX #$F0

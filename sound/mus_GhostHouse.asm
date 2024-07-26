@@ -1,233 +1,249 @@
 GhostHouse_P1:
+	db SongSpeed, 1
 GhostHouse_P1Loop:
-	.byte SongSpeed, 1
-	.byte Transpose, $1A
-	.byte DutySet, $00
-	.byte PitchSet, $00
-	.byte VolSet, $33
-	.byte $F0
-	.word GhostHouse_P1Seq
-	db $F0
-	.word GhostHouse_P1Seq
-	db $F0
-	.word GhostHouse_P1Seq
-	db $F0
-	.word GhostHouse_P1Seq
-	db $F0
-	.word GhostHouse_P1Seq
-	db $F0
-	.word GhostHouse_P1Seq
-	db $F0
-	.word GhostHouse_P1Seq
-	db $F0
-	.word GhostHouse_P1Seq
-	db $F0
-	.word GhostHouse_P1Seq2
-	db $F0
-	.word GhostHouse_P1Seq2
-	db $F0
-	.word GhostHouse_P1Seq2
-	db $F0
-	.word GhostHouse_P1Seq2
-	db $F0
-	.word GhostHouse_P1Seq2
-	db $F0
-	.word GhostHouse_P1Seq2
-	db $F0
-	.word GhostHouse_P1Seq2
-	db $F0
-	.word GhostHouse_P1Seq2
-	db Transpose
-	db C2
-	db $F0
-	.word GhostHouse_P1Seq
-	db $F0
-	.word GhostHouse_P1Seq
-	db $F0
-	.word GhostHouse_P1Seq
-	db $F0
-	.word GhostHouse_P1Seq
-	db $F0
-	.word GhostHouse_P1Seq
-	db $F0
-	.word GhostHouse_P1Seq
-	db $F0
-	.word GhostHouse_P1Seq
-	db $F0
-	.word GhostHouse_P1Seq
-	db $F0
-	.word GhostHouse_P1Seq2
-	db $F0
-	.word GhostHouse_P1Seq2
-	db $F0
-	.word GhostHouse_P1Seq2
-	db $F0
-	.word GhostHouse_P1Seq2
-	db $F0
-	.word GhostHouse_P1Seq2
-	db $F0
-	.word GhostHouse_P1Seq2
-	db $F0
-	.word GhostHouse_P1Seq2
-	db $F0
-	.word GhostHouse_P1Seq2
-	.byte Transpose, $16
-	.byte $F0
-	.word GhostHouse_P1Seq
-	db $F0
-	.word GhostHouse_P1Seq
-	db $F0
-	.word GhostHouse_P1Seq
-	db $F0
-	.word GhostHouse_P1Seq
-	db $F0
-	.word GhostHouse_P1Seq
-	db $F0
-	.word GhostHouse_P1Seq
-	db $F0
-	.word GhostHouse_P1Seq
-	db $F0
-	.word GhostHouse_P1Seq
-	db $F0
-	.word GhostHouse_P1Seq2
-	db $F0
-	.word GhostHouse_P1Seq2
-	db $F0
-	.word GhostHouse_P1Seq2
-	db $F0
-	.word GhostHouse_P1Seq2
-	db $F0
-	.word GhostHouse_P1Seq2
-	db $F0
-	.word GhostHouse_P1Seq2
-	db $F0
-	.word GhostHouse_P1Seq2
-	db $F0
-	.word GhostHouse_P1Seq2
-	db $F4
-	.word GhostHouse_P1Loop
+	db Transpose,6
+	db NLenAdd,78
+	db NLen+78
+	db NRest
+	db NRest
+	db SegCall
+	dw GhostHouse_PSub1
+	db Transpose,8
+	db SegCall
+	dw GhostHouse_PSub1
+	db Transpose,10
+	db SegCall
+	dw GhostHouse_PSub1
+	db Transpose,12
+	db SegCall
+	dw GhostHouse_PSub1
+	db Transpose,16
+	db PitchSet, $36
+	db SegCall
+	dw GhostHouse_PSub2
+	db NLenAdd,78
+	db NLen+78
+	db NRest
+	db NRest
+	db Transpose,10
+	db SegCall
+	dw GhostHouse_PSub1
+	db Transpose,14
+	db PitchSet, $36
+	db SegCall
+	dw GhostHouse_PSub2
+	db NLenAdd,78
+	db NLen+78
+	db NRest
+	db NRest
+	db Transpose,8
+	db SegCall
+	dw GhostHouse_PSub1
+	db Transpose,12
+	db PitchSet, $36
+	db SegCall
+	dw GhostHouse_PSub2
+	db NLenAdd,78
+	db NLen+78
+	db NRest
+	db NRest
+	db SongJump
+	dw GhostHouse_P1Loop
 	db $FF
-GhostHouse_P1Seq:
-	db $8A
-	db A3
-	db B3
-	db $2B
-	db A3
-	db A3
-	db B3
-	db $2B
-	db A3
-	db $F1
+GhostHouse_P2:
+GhostHouse_P2Loop:
+	db Transpose,0
+	db NLenAdd,78
+	db NLen+78
+	db NRest
+	db NRest
+	db SegCall
+	dw GhostHouse_PSub1
+	db Transpose,2
+	db SegCall
+	dw GhostHouse_PSub1
+	db Transpose,4
+	db SegCall
+	dw GhostHouse_PSub1
+	db Transpose,6
+	db SegCall
+	dw GhostHouse_PSub1
+	db DutySet, $3D
+	db PitchSet, $35
+	db Transpose,4
+	db SegCall
+	dw GhostHouse_PSub2
+	db NLenAdd,78
+	db NLen+78
+	db NRest
+	db NRest
+	db SegCall
+	dw GhostHouse_PSub1
+	db Transpose,2
+	db DutySet, $3D
+	db PitchSet, $35
+	db SegCall
+	dw GhostHouse_PSub2
+	db NLenAdd,78
+	db NLen+78
+	db NRest
+	db NRest
+	db SegCall
+	dw GhostHouse_PSub1
+	db Transpose,0
+	db DutySet, $3D
+	db PitchSet, $35
+	db SegCall
+	dw GhostHouse_PSub2
+	db NLenAdd,78
+	db NLen+78
+	db NRest
+	db NRest
+	db SongJump
+	dw GhostHouse_P2Loop
 	db $FF
-GhostHouse_P1Seq2:
-	db $8A
+GhostHouse_PSub1:
+	db DutySet, $7B
+	db PitchSet, 0
+	db VolSet, $25
+	db NLenAdd,39
+	db NLen+78
+	db B2
+	db PitchSet, $32
+	db VolSet, $31
+	db B2
+	db NLenAdd,0
+	db NLen+78
+	db NRest
+	db SegEnd
+GhostHouse_PSub2:
+	db VolSet, $37
+	db NLenAdd,0
+	db NLen+78
+	db A#1
+	db NLenAdd,0
+	db NLen+39
+	db G1
+	db D1
+	db D#1
+	db NLenAdd,117
+	db NLen+39
+	db G1
+	db NLenAdd,0
+	db NLen+39
+	db D1
+	db G1
+	db D2
+	db NLenAdd,0
+	db NLen+78
+	db A#1
+	db VolSet, $42
+	db A1
+	db SegEnd
+GhostHouse_DPCM:
+GhostHouse_DPCMLoop:
+	db SongLoop,16
+	db NLen+6
+	db B3
+	db NLen+3
+	db NRest
+	db NLen+7
+	db C#4
+	db NLen+3
+	db NRest
+	db NLen+7
 	db A3
-	db B3
-	db $2B
-	db B3
-	db A3
-	db B3
-	db $2B
-	db B3
-	db $F1
+	db NLen+3
+	db NRest
+	db NLen+7
+	db C4
+	db NLen+3
+	db NRest
+	db SongLoopEnd
+	db SongLoop,8
+	db SegCall
+	dw GhostHouse_DPCMSub1
+	db SongLoopEnd
+	db SongLoop,8
+	db SegCall
+	dw GhostHouse_DPCMSub2
+	db SongLoopEnd
+	db SongLoop,32
+	db NLen+6
+	db F4
+	db NLen+3
+	db NRest
+	db NLen+7
+	db G4
+	db NLen+3
+	db NRest
+	db NLen+7
+	db D#4
+	db NLen+3
+	db NRest
+	db NLen+7
+	db F#4
+	db NLen+3
+	db NRest
+	db SongLoopEnd
+	db SongLoop,32
+	db SegCall
+	dw GhostHouse_DPCMSub2
+	db SongLoopEnd
+	db SongLoop,32
+	db SegCall
+	dw GhostHouse_DPCMSub1
+	db SongLoopEnd
+	db SongJump
+	dw GhostHouse_DPCMLoop
 	db $FF
-GhostHouse_P2Tri:
-GhostHouse_P2TriLoop:
-	.byte Transpose, $0E
-	.byte $F0
-	.word GhostHouse_P2Seq
-	db $F0
-	.word GhostHouse_P2Seq2
-	.byte Transpose, $0C
-	.byte $F0
-	.word GhostHouse_P2Seq
-	db $F0
-	.word GhostHouse_P2Seq2
-	.byte Transpose, $0A
-	.byte $F0
-	.word GhostHouse_P2Seq
-	db $F0
-	.word GhostHouse_P2Seq2
-	db $F4
-	.word GhostHouse_P2TriLoop
-	db $FF
-GhostHouse_P2Seq:
-	.byte DutySet, $00
-	.byte PitchSet, $62
-	.byte VolSet, $02
-	.byte NLen+20
-	.byte NRest
-	.byte NRest
-	.byte NRest
-	.byte NRest
-	.byte NRest
-	.byte NRest
-	.byte NRest
-	.byte NRest
-	.byte NRest
-	.byte NRest
-	.byte NRest
-	.byte NRest
-	.byte NRest
-	.byte NRest
-	.byte NRest
-	.byte NRest
-	.byte NRest
-	.byte NRest
-	.byte NRest
-	.byte NRest
-	.byte NRest
-	.byte NRest
-	.byte NRest
-	.byte NRest
-	.byte NRest
-	.byte NRest
-	.byte NRest
-	.byte NRest
-	.byte NRest
-	.byte NRest
-	.byte NRest
-	.byte NRest
-	.byte $F1
-	.byte $FF
-GhostHouse_P2Seq2:
-	.byte DutySet, $12
-	.byte PitchSet, $00
-	.byte VolSet, $11
-	.byte $D0
-	.byte C2
-	.byte $A8
-	.byte $15
-	.byte $10
-	.byte $11
-	.byte $D0
-	.byte $15
-	.byte NLen+20
-	.byte NRest
-	.byte NRest
-	.byte $A8
-	.byte $10
-	.byte $15
-	.byte $1C
-	.byte $D0
-	.byte C2
-	.byte $17
-	.byte NLen+20
-	.byte NRest
-	.byte NRest
-	.byte $F1
-	.byte $FF
+GhostHouse_DPCMSub1:
+	db NLen+6
+	db C#4
+	db NLen+3
+	db NRest
+	db NLen+7
+	db D#4
+	db NLen+3
+	db NRest
+	db NLen+7
+	db B3
+	db NLen+3
+	db NRest
+	db NLen+7
+	db D4
+	db NLen+3
+	db NRest
+	db SegEnd
+GhostHouse_DPCMSub2:
+	db NLen+6
+	db D#4
+	db NLen+3
+	db NRest
+	db NLen+7
+	db F4
+	db NLen+3
+	db NRest
+	db NLen+7
+	db C#4
+	db NLen+3
+	db NRest
+	db NLen+7
+	db E4
+	db NLen+3
+	db NRest
+	db SegEnd
 GhostHouse_End:
 	db $FF
 GhostHouse_Footer:
 	db NRest
-	.word GhostHouse_P1
+	dw GhostHouse_P1
 	db $01
-	.word GhostHouse_P2Tri
+	dw GhostHouse_P2
 	db $02
-	.word GhostHouse_P2Tri
+	dw GhostHouse_End
 	db $03
-	.word GhostHouse_End
+	dw GhostHouse_End
 	db $04
-	.word GhostHouse_End
+	dw GhostHouse_DPCM
 	db $FF

@@ -45,7 +45,7 @@ ValleyofBowser_P2Loop:
 	.word ValleyofBowser_P2Loop
 	db $FF
 ValleyofBowser_P2Sub:
-	.byte PitchSet, $39
+	.byte PitchSet, $00
 	.byte NLen+7
 	.byte NRest
 	.byte NLen+8

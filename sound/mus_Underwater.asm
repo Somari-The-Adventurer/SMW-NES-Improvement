@@ -1,645 +1,830 @@
 Underwater_P1:
-	.byte SongSpeed, 1
-	.byte Transpose, $00
-	.byte DutySet, $7B
-	.byte PitchSet, $0F
-	.byte VolSet, $09
-	.byte NLen+38
-	.byte D5
-	.byte NLen+4
-	.byte NRest
-	.byte NLen+24
-	.byte A#4
-	.byte NLen+4
-	.byte NRest
-	.byte NLen+10
-	.byte F4
-	.byte NLen+4
-	.byte NRest
-	.byte NLen+23
-	.byte E4
-	.byte NLen+3
-	.byte E4
-	.byte NLen+2
-	.byte NRest
-	.byte NLen+3
-	.byte F4
-	.byte NLen+2
-	.byte NRest
-	.byte NLen+3
-	.byte F#4
-	.byte NLen+2
-	.byte NRest
-	.byte NLen+42
-	.byte G4
-	.byte NLen+4
-	.byte NRest
+	db SongSpeed, 1
+	db Transpose, $00
+	db DutySet, $7B
+	db PitchSet, $0F
+	db VolSet, $09
+	db NLen+38
+	db D5
+	db NLen+4
+	db NRest
+	db NLen+24
+	db A#4
+	db NLen+4
+	db NRest
+	db NLen+10
+	db F4
+	db NLen+4
+	db NRest
+	db NLen+23
+	db E4
+	db NLen+3
+	db E4
+	db NLen+2
+	db NRest
+	db NLen+3
+	db F4
+	db NLen+2
+	db NRest
+	db NLen+3
+	db F#4
+	db NLen+2
+	db NRest
+	db NLen+42
+	db G4
+	db NLen+4
+	db NRest
 Underwater_P1Loop:
-	.byte SongLoop,2
-	.byte NLen+42
-	.byte NRest
-	.byte SegCall
-	.word Underwater_PSub1
-	.byte NLen+42
-	.byte NRest
-	.byte Transpose, 1
-	.byte SegCall
-	.word Underwater_P1Sub1
-	.byte SongLoopEnd
-	.byte SongLoop,2
-	.byte SegCall
-	.word Underwater_PSub1
-	.byte SegCall
-	.word Underwater_PSub1
-	.byte SegCall
-	.word Underwater_PSub2
-	.byte Transpose, 2
-	.byte SegCall
-	.word Underwater_P1Sub1
-	.byte SegCall
-	.word Underwater_P1Sub2
-	.byte Transpose, 3
-	.byte SegCall
-	.word Underwater_P1Sub1
-	.byte SegCall
-	.word Underwater_PSub2
-	.byte Transpose, 2
-	.byte SegCall
-	.word Underwater_P1Sub2
-	.byte SegCall
-	.word Underwater_PSub1
-	.byte SegCall
-	.word Underwater_PSub1
-	.byte SegCall
-	.word Underwater_PSub2
-	.byte Transpose, 2
-	.byte SegCall
-	.word Underwater_P1Sub1
-	.byte SegCall
-	.word Underwater_PSub2
-	.byte SegCall
-	.word Underwater_P1Sub3
-	.byte SegCall
-	.word Underwater_PSub1
-	.byte NLen+42
-	.byte NRest
-	.byte SongLoopEnd
-	.byte SongLoop,2
-	.byte Transpose, 5
-	.byte SegCall
-	.word Underwater_P1Sub1
-	.byte SegCall
-	.word Underwater_P1Sub1
-	.byte Transpose, 0
-	.byte SegCall
-	.word Underwater_P1Sub4
-	.byte SegCall
-	.word Underwater_P1Sub4
-	.byte SegCall
-	.word Underwater_P1Sub5
-	.byte SegCall
-	.word Underwater_P1Sub5
-	.byte SegCall
-	.word Underwater_P1Sub6
-	.byte Transpose, 2
-	.byte NLen+14
-	.byte NRest
-	.byte SegCall
-	.word Underwater_P1Sub2T
-	.byte NLen+14
-	.byte NRest
-	.byte SongLoopEnd
-	.byte SegCall
-	.word Underwater_PSub1
-	.byte SegCall
-	.word Underwater_PSub1
-	.byte SegCall
-	.word Underwater_PSub2
-	.byte Transpose, 2
-	.byte SegCall
-	.word Underwater_P1Sub1
-	.byte SegCall
-	.word Underwater_PSub2
-	.byte SegCall
-	.word Underwater_P1Sub3
-	.byte SegCall
-	.word Underwater_PSub1
-	.byte NLen+42
-	.byte NRest
-	.byte $F4
-	.word Underwater_P1Loop
-	.byte $FF
-Underwater_P1Sub1:
-	.byte NLen+14
-	.byte NRest
-	.byte NLen+2
-	.byte A2
-	.byte C3
-	.byte NLen+10
-	.byte NRest
-	.byte NLen+2
-	.byte A2
-	.byte C3
-	.byte NLen+10
-	.byte NRest
-	.byte SegEnd
-Underwater_P1Sub2:
-	.byte NLen+14
-	.byte NRest
-	.byte NLen+2
-	.byte A#2
-	.byte D3
-	.byte NLen+10
-	.byte NRest
-Underwater_P1Sub2T:
-	.byte NLen+2
-	.byte A#2
-	.byte D3
-	.byte NLen+10
-	.byte NRest
-	.byte SegEnd
-Underwater_P1Sub3:
-	.byte NLen+14
-	.byte NRest
-	.byte NLen+2
-	.byte A#2
-	.byte C3
-	.byte NLen+10
-	.byte NRest
-	.byte NLen+2
-	.byte A#2
-	.byte C3
-	.byte NLen+10
-	.byte NRest
-	.byte SegEnd
-Underwater_P1Sub4:
-	.byte NLen+14
-	.byte NRest
-	.byte NLen+2
-	.byte C3
-	.byte F3
-	.byte NLen+10
-	.byte NRest
-	.byte NLen+2
-	.byte C3
-	.byte F3
-	.byte NLen+10
-	.byte NRest
-	.byte SegEnd
-Underwater_P1Sub5:
-	.byte NLen+14
-	.byte NRest
-	.byte NLen+2
-	.byte B2
-	.byte F3
-	.byte NLen+10
-	.byte NRest
-	.byte NLen+2
-	.byte B2
-	.byte F3
-	.byte NLen+10
-	.byte NRest
-	.byte SegEnd
-Underwater_P1Sub6:
-	.byte NLen+14
-	.byte NRest
-	.byte NLen+2
-	.byte A#2
-	.byte F3
-	.byte NLen+10
-	.byte NRest
-	.byte NLen+2
-	.byte A#2
-	.byte F3
-	.byte NLen+10
-	.byte NRest
-	.byte SegEnd
-Underwater_P2:
-	.byte Transpose, $00
-	.byte DutySet, $7B
-	.byte PitchSet, $0F
-	.byte VolSet, $09
-	.byte NLen+38
-	.byte F4
-	.byte NLen+4
-	.byte NRest
-	.byte NLen+24
-	.byte D4
-	.byte NLen+4
-	.byte NRest
-	.byte NLen+10
-	.byte A#3
-	.byte NLen+4
-	.byte NRest
-	.byte NLen+23
-	.byte G3
-	.byte NLen+3
-	.byte G3
-	.byte NLen+2
-	.byte NRest
-	.byte NLen+3
-	.byte G#3
-	.byte NLen+2
-	.byte NRest
-	.byte NLen+3
-	.byte A3
-	.byte NLen+2
-	.byte NRest
-	.byte NLen+42
-	.byte A#3
-	.byte NLen+4
-	.byte NRest
-Underwater_P2Loop:
-	.byte SegCall
-	.word Underwater_PSub1
-	.byte SegCall
-	.word Underwater_P2Sub4
-	.byte SegCall
-	.word Underwater_PSub2
-	.byte SegCall
-	.word Underwater_P2Sub5
-	.byte NLen+28
-	.byte D6
-	.byte SegCall
-	.word Underwater_PSub1
-	.byte SegCall
-	.word Underwater_P2Sub4
-	.byte SegCall
-	.word Underwater_PSub2
-	.byte SegCall
-	.word Underwater_P2Sub5
-	.byte NLen+28
-	.byte E6
-	.byte SegCall
-	.word Underwater_P2Sub1
-	.byte SegCall
-	.word Underwater_P2Sub1
-	.byte SegCall
-	.word Underwater_P2Sub3
-	.byte NLen+14
-	.byte D#3
-	.byte NLen+70
-	.byte D3
-	.byte Transpose, 0
-	.byte DutySet, $7B
-	.byte VolSet, $19
-	.byte NLen+2
-	.byte C3
-	.byte E3
-	.byte NLen+10
-	.byte NRest
-	.byte SegCall
-	.word Underwater_P2Sub3
-	.byte NLen+14
-	.byte G2
-	.byte NLen+70
-	.byte G3
-	.byte Transpose, 0
-	.byte DutySet, $7B
-	.byte VolSet, $19
-	.byte NLen+2
-	.byte C3
-	.byte E3
-	.byte NLen+10
-	.byte NRest
-	.byte Transpose, $11
-	.byte PitchSet, $0B
-	.byte VolSet, $0A
-	.byte SegCall
-	.word Underwater_P2Sub2
-	.byte $F4
-	.word Underwater_P2Loop
-	.byte $FF
-Underwater_P2Sub1:
-	.byte Transpose, $11
-	.byte DutySet, $7B
-	.byte PitchSet, $0B
-	.byte VolSet, $0A
-	.byte NLen+42
-	.byte E3
-	.byte NLen+28
-	.byte C3
-	.byte NLen+14
-	.byte G2
-	.byte NLen+28
-	.byte A2
-	.byte NLen+14
-	.byte C3
-	.byte NLen+42
-	.byte C3
-	.byte NLen+28
-	.byte G2
-	.byte NLen+14
-	.byte C3
-	.byte NLen+28
-	.byte C3
-	.byte NLen+14
-	.byte G3
-	.byte NLen+42
-	.byte E3
-	.byte D3
-Underwater_P2Sub2:
-	.byte NLen+42
-	.byte E3
-	.byte NLen+28
-	.byte C3
-	.byte NLen+14
-	.byte G2
-	.byte NLen+28
-	.byte A2
-	.byte NLen+14
-	.byte C3
-	.byte NLen+42
-	.byte C3
-	.byte NLen+28
-	.byte G2
-	.byte NLen+14
-	.byte C3
-	.byte F3
-	.byte E3
-	.byte D3
-	.byte NLen+42
-	.byte C3
-	.byte SongJump
-	.word Underwater_PSub1
-Underwater_P2Sub3:
-	.byte Transpose, $11
-	.byte PitchSet, $0D
-	.byte VolSet, $0C
-	.byte NLen+42
-	.byte E3
-	.byte NLen+28
-	.byte C3
-	.byte NLen+14
-	.byte G2
-	.byte NLen+42
-	.byte E3
-	.byte C3
-	.byte D#3
-	.byte NLen+28
-	.byte C3
-	.byte SegEnd
-Underwater_P2Sub4:
-	.byte PitchSet, $0F
-	.byte DutySet, $07
-	.byte VolSet, $10
-	.byte NLen+3
-	.byte C5
-	.byte NLen+4
-	.byte D5
-	.byte NLen+3
-	.byte F5
-	.byte NLen+4
-	.byte A5
-	.byte NLen+28
-	.byte C6
-	.byte SegEnd
-Underwater_P2Sub5:
-	.byte PitchSet, $0F
-	.byte DutySet, $07
-	.byte VolSet, $10
-	.byte NLen+3
-	.byte D5
-	.byte NLen+4
-	.byte E5
-	.byte NLen+3
-	.byte G5
-	.byte NLen+4
-	.byte A#5
-	.byte SegEnd
-Underwater_PSub1:
-	.byte NLen+14
-	.byte NRest
-	.byte Transpose, 0
-	.byte DutySet, $7B
-	.byte VolSet, $19
-	.byte NLen+2
-	.byte A2
-	.byte C3
-	.byte NLen+10
-	.byte NRest
-	.byte NLen+2
-	.byte A2
-	.byte C3
-	.byte NLen+10
-	.byte NRest
-	.byte SegEnd
-Underwater_PSub2:
-	.byte NLen+14
-	.byte NRest
-	.byte Transpose, 0
-	.byte DutySet, $7B
-	.byte VolSet, $19
-	.byte NLen+2
-	.byte A#2
-	.byte D3
-	.byte NLen+10
-	.byte NRest
-	.byte NLen+2
-	.byte A#2
-	.byte D3
-	.byte NLen+10
-	.byte NRest
-	.byte SegEnd
-Underwater_Tri:
-	.byte Transpose, $00
-	.byte DutySet, $7B
-	.byte PitchSet, $0F
-	.byte VolSet, $09
-	.byte NLen+38
-	.byte G3
-	.byte NLen+4
-	.byte NRest
-	.byte NLen+24
-	.byte G3
-	.byte NLen+4
-	.byte NRest
-	.byte NLen+10
-	.byte G3
-	.byte NLen+4
-	.byte NRest
-	.byte NLen+23
-	.byte C2
-	.byte NLen+3
-	.byte C2
-	.byte NLen+2
-	.byte NRest
-	.byte NLen+3
-	.byte D2
-	.byte NLen+2
-	.byte NRest
-	.byte NLen+3
-	.byte D#2
-	.byte NLen+2
-	.byte NRest
-	.byte NLen+42
-	.byte E2
-	.byte NLen+4
-	.byte NRest
-Underwater_TriLoop:
-	.byte SegCall
-	.word Underwater_TriSub1
-	.byte NLen+24
-	.byte C2
-	.byte NLen+18
-	.byte NRest
-	.byte SegCall
-	.word Underwater_TriSub1
-	.byte NLen+7
-	.byte C2
-	.byte NRest
-	.byte D2
-	.byte NRest
-	.byte E2
-	.byte NRest
-	.byte SegCall
-	.word Underwater_TriSub2
-	.byte SegCall
-	.word Underwater_TriSub2
-	.byte SegCall
-	.word Underwater_TriSub4
-	.byte SegCall
-	.word Underwater_TriSub4
-	.byte SegCall
-	.word Underwater_TriSub3
-	.byte $F4
-	.word Underwater_TriLoop
-	.byte $FF
-Underwater_TriSub1:
-	.byte NLen+24
-	.byte F2
-	.byte NLen+18
-	.byte NRest
-	.byte NLen+24
-	.byte D2
-	.byte NLen+18
-	.byte NRest
-	.byte NLen+24
-	.byte G2
-	.byte NLen+18
-	.byte NRest
-	.byte SegEnd
-Underwater_TriSub2:
-	.byte NLen+24
-	.byte F2
-	.byte NLen+18
-	.byte NRest
-	.byte NLen+24
-	.byte A2
-	.byte NLen+18
-	.byte NRest
-	.byte NLen+24
-	.byte A#2
-	.byte NLen+18
-	.byte NRest
-	.byte NLen+24
-	.byte B2
-	.byte NLen+18
-	.byte NRest
-	.byte NLen+24
-	.byte A2
-	.byte NLen+18
-	.byte NRest
-	.byte NLen+24
-	.byte G#2
-	.byte NLen+18
-	.byte NRest
-	.byte NLen+24
-	.byte G2
-	.byte NLen+18
-	.byte NRest
-	.byte NLen+7
-	.byte C2
-	.byte NRest
-	.byte D2
-	.byte NRest
-	.byte E2
-	.byte NRest
-Underwater_TriSub3:
-	.byte NLen+24
-	.byte F2
-	.byte NLen+18
-	.byte NRest
-	.byte NLen+24
-	.byte A2
-	.byte NLen+18
-	.byte NRest
-	.byte NLen+24
-	.byte A#2
-	.byte NLen+18
-	.byte NRest
-	.byte NLen+24
-	.byte B2
-	.byte NLen+18
-	.byte NRest
-	.byte NLen+24
-	.byte G2
-	.byte NLen+18
-	.byte NRest
-	.byte NLen+24
-	.byte C3
-	.byte NLen+18
-	.byte NRest
-	.byte NLen+7
-	.byte F2
-	.byte NRest
-	.byte C3
-	.byte NRest
-	.byte A2
-	.byte NRest
-	.byte NLen+24
-	.byte F2
-	.byte NLen+18
-	.byte NRest
-	.byte SegEnd
-Underwater_TriSub4:
-	.byte NLen+24
-	.byte A#2
-	.byte NLen+18
-	.byte NRest
-	.byte NLen+24
-	.byte A#2
-	.byte NLen+18
-	.byte NRest
-	.byte NLen+24
-	.byte A2
-	.byte NLen+18
-	.byte NRest
-	.byte NLen+24
-	.byte A2
-	.byte NLen+18
-	.byte NRest
-	.byte NLen+24
-	.byte G#2
-	.byte NLen+18
-	.byte NRest
-	.byte NLen+24
-	.byte G#2
-	.byte NLen+18
-	.byte NRest
-	.byte NLen+24
-	.byte G2
-	.byte NLen+18
-	.byte NRest
-	.byte NLen+7
-	.byte C2
-	.byte NRest
-	.byte D2
-	.byte NRest
-	.byte E2
-	.byte NRest
-	.byte SegEnd
-Underwater_End:
+	db NLen+84
+	db NRest
+	db NRest
+	db NRest
+	db NRest
+	db DutySet, $7B
+	db PitchSet, $0F
+	db VolSet, $25
+	db SegCall
+	dw Underwater_P1Sub1
+	db NLen+42
+	db C3
+	db C#3
+	db D3
+	db C#3
+	db C3
+	db A#2
+	db NLen+77
+	db A2
+	db NLen+7
+	db NRest
+	db SegCall
+	dw Underwater_P1Sub1
+	db SegCall
+	dw Underwater_P1Sub2
+	db DutySet, $07
+	db VolSet, $10
+	db SegCall
+	dw Underwater_P1Sub3
+	db NLen+49
+	db B4
+	db NLen+7
+	db NRest
+	db B4
+	db D5
+	db F5
+	db G5
+	db NLen+35
+	db A#5
+	db NLen+7
+	db NRest
+	db NLen+35
+	db G5
+	db NLen+7
+	db NRest
+	db SegCall
+	dw Underwater_P1Sub3
+	db NLen+49
+	db B4
+	db NLen+7
+	db NRest
+	db C5
+	db C#5
+	db D5
+	db F5
+	db NLen+35
+	db A5
+	db NLen+7
+	db NRest
+	db NLen+35
+	db G5
+	db NLen+7
+	db NRest
+	db DutySet, $7B
+	db VolSet, $25
+	db SegCall
+	dw Underwater_P1Sub2
+	db $F4
+	dw Underwater_P1Loop
 	db $FF
+Underwater_P1Sub1:
+	db NLen+42
+	db C3
+	db C#3
+	db D3
+	db C#3
+	db C3
+	db B2
+	db A#2
+	db E3
+	db SegEnd
+Underwater_P1Sub2:
+	db NLen+42
+	db C3
+	db C#3
+	db D3
+	db C#3
+	db C3
+	db E3
+	db NLen+77
+	db F3
+	db NLen+7
+	db NRest
+	db SegEnd
+Underwater_P1Sub3:
+	db NLen+49
+	db C5
+	db NLen+7
+	db NRest
+	db C#5
+	db D5
+	db F5
+	db A5
+	db NLen+35
+	db C6
+	db NLen+7
+	db NRest
+	db NLen+35
+	db A5
+	db NLen+7
+	db NRest
+	db SegEnd
+Underwater_P2:
+	db Transpose, $00
+	db DutySet, $7B
+	db PitchSet, $0F
+	db VolSet, $09
+	db NLen+38
+	db F4
+	db NLen+4
+	db NRest
+	db NLen+24
+	db D4
+	db NLen+4
+	db NRest
+	db NLen+10
+	db A#3
+	db NLen+4
+	db NRest
+	db NLen+23
+	db G3
+	db NLen+3
+	db G3
+	db NLen+2
+	db NRest
+	db NLen+3
+	db G#3
+	db NLen+2
+	db NRest
+	db NLen+3
+	db A3
+	db NLen+2
+	db NRest
+	db NLen+42
+	db A#3
+	db NLen+4
+	db NRest
+Underwater_P2Loop:
+	db Transpose, $00
+	db SegCall
+	dw Underwater_P2Sub4
+	db SegCall
+	dw Underwater_P2Sub5
+	db NLen+28
+	db D6
+	db SegCall
+	dw Underwater_P2Sub4
+	db SegCall
+	dw Underwater_P2Sub5
+	db NLen+28
+	db E6
+	db SegCall
+	dw Underwater_P2Sub1
+	db SegCall
+	dw Underwater_P2Sub1
+	db SegCall
+	dw Underwater_P2Sub3
+	db NLen+14
+	db D#3
+	db NLen+70
+	db D3
+	db NLen+14
+	db NRest
+	db SegCall
+	dw Underwater_P2Sub3
+	db NLen+14
+	db G2
+	db NLen+70
+	db G3
+	db NLen+14
+	db NRest
+	db Transpose, $11
+	db PitchSet, $0B
+	db VolSet, $0A
+	db SegCall
+	dw Underwater_P2Sub2
+	db $F4
+	dw Underwater_P2Loop
+	db $FF
+Underwater_P2Sub1:
+	db Transpose, $11
+	db DutySet, $7B
+	db PitchSet, $0B
+	db VolSet, $0A
+	db NLen+42
+	db E3
+	db NLen+28
+	db C3
+	db NLen+14
+	db G2
+	db NLen+28
+	db A2
+	db NLen+14
+	db C3
+	db NLen+42
+	db C3
+	db NLen+28
+	db G2
+	db NLen+14
+	db C3
+	db NLen+28
+	db C3
+	db NLen+14
+	db G3
+	db NLen+42
+	db E3
+	db D3
+Underwater_P2Sub2:
+	db NLen+42
+	db E3
+	db NLen+28
+	db C3
+	db NLen+14
+	db G2
+	db NLen+28
+	db A2
+	db NLen+14
+	db C3
+	db NLen+42
+	db C3
+	db NLen+28
+	db G2
+	db NLen+14
+	db C3
+	db F3
+	db E3
+	db D3
+	db NLen+42
+	db C3
+	db NRest
+	db SegEnd
+Underwater_P2Sub3:
+	db Transpose, $11
+	db PitchSet, $0D
+	db VolSet, $0C
+	db NLen+42
+	db E3
+	db NLen+28
+	db C3
+	db NLen+14
+	db G2
+	db NLen+42
+	db E3
+	db C3
+	db D#3
+	db NLen+28
+	db C3
+	db SegEnd
+Underwater_P2Sub4:
+	db PitchSet, $0F
+	db DutySet, $07
+	db VolSet, $10
+	db NLen+42
+	db NRest
+	db NLen+3
+	db C5
+	db NLen+4
+	db D5
+	db NLen+3
+	db F5
+	db NLen+4
+	db A5
+	db NLen+28
+	db C6
+	db SegEnd
+Underwater_P2Sub5:
+	db PitchSet, $0F
+	db DutySet, $07
+	db VolSet, $10
+	db NLen+42
+	db NRest
+	db NLen+3
+	db D5
+	db NLen+4
+	db E5
+	db NLen+3
+	db G5
+	db NLen+4
+	db A#5
+	db SegEnd
+Underwater_Tri:
+	db Transpose, $00
+	db DutySet, $7B
+	db PitchSet, $0F
+	db VolSet, $09
+	db NLen+38
+	db G3
+	db NLen+4
+	db NRest
+	db NLen+24
+	db G3
+	db NLen+4
+	db NRest
+	db NLen+10
+	db G3
+	db NLen+4
+	db NRest
+	db NLen+23
+	db C2
+	db NLen+3
+	db C2
+	db NLen+2
+	db NRest
+	db NLen+3
+	db D2
+	db NLen+2
+	db NRest
+	db NLen+3
+	db D#2
+	db NLen+2
+	db NRest
+	db NLen+42
+	db E2
+	db NLen+4
+	db NRest
+Underwater_TriLoop:
+	db SegCall
+	dw Underwater_TriSub1
+	db NLen+24
+	db C2
+	db NLen+18
+	db NRest
+	db SegCall
+	dw Underwater_TriSub1
+	db NLen+7
+	db C2
+	db NRest
+	db D2
+	db NRest
+	db E2
+	db NRest
+	db SegCall
+	dw Underwater_TriSub2
+	db SegCall
+	dw Underwater_TriSub2
+	db SegCall
+	dw Underwater_TriSub4
+	db SegCall
+	dw Underwater_TriSub4
+	db SegCall
+	dw Underwater_TriSub3
+	db $F4
+	dw Underwater_TriLoop
+	db $FF
+Underwater_TriSub1:
+	db NLen+24
+	db F2
+	db NLen+18
+	db NRest
+	db NLen+24
+	db D2
+	db NLen+18
+	db NRest
+	db NLen+24
+	db G2
+	db NLen+18
+	db NRest
+	db SegEnd
+Underwater_TriSub2:
+	db NLen+24
+	db F2
+	db NLen+18
+	db NRest
+	db NLen+24
+	db A2
+	db NLen+18
+	db NRest
+	db NLen+24
+	db A#2
+	db NLen+18
+	db NRest
+	db NLen+24
+	db B2
+	db NLen+18
+	db NRest
+	db NLen+24
+	db A2
+	db NLen+18
+	db NRest
+	db NLen+24
+	db G#2
+	db NLen+18
+	db NRest
+	db NLen+24
+	db G2
+	db NLen+18
+	db NRest
+	db NLen+7
+	db C2
+	db NRest
+	db D2
+	db NRest
+	db E2
+	db NRest
+Underwater_TriSub3:
+	db NLen+24
+	db F2
+	db NLen+18
+	db NRest
+	db NLen+24
+	db A2
+	db NLen+18
+	db NRest
+	db NLen+24
+	db A#2
+	db NLen+18
+	db NRest
+	db NLen+24
+	db B2
+	db NLen+18
+	db NRest
+	db NLen+24
+	db G2
+	db NLen+18
+	db NRest
+	db NLen+24
+	db C3
+	db NLen+18
+	db NRest
+	db NLen+7
+	db F2
+	db NRest
+	db C3
+	db NRest
+	db A2
+	db NRest
+	db NLen+24
+	db F2
+	db NLen+18
+	db NRest
+	db SegEnd
+Underwater_TriSub4:
+	db NLen+24
+	db A#2
+	db NLen+18
+	db NRest
+	db NLen+24
+	db A#2
+	db NLen+18
+	db NRest
+	db NLen+24
+	db A2
+	db NLen+18
+	db NRest
+	db NLen+24
+	db A2
+	db NLen+18
+	db NRest
+	db NLen+24
+	db G#2
+	db NLen+18
+	db NRest
+	db NLen+24
+	db G#2
+	db NLen+18
+	db NRest
+	db NLen+24
+	db G2
+	db NLen+18
+	db NRest
+	db NLen+7
+	db C2
+	db NRest
+	db D2
+	db NRest
+	db E2
+	db NRest
+	db SegEnd
+Underwater_Noise:
+	db PitchSet, 0
+	db VolSet, 0
+	db NLen+84
+	db NRest
+	db NRest
+Underwater_NoiseLoop:
+	db SongLoop,11
+	db SegCall
+	dw Underwater_NoiseSub1
+	db SongLoopEnd
+	db SegCall
+	dw Underwater_NoiseSub2
+	db SongLoop,7
+	db SegCall
+	dw Underwater_NoiseSub1
+	db SongLoopEnd
+	db SegCall
+	dw Underwater_NoiseSub2
+	db SongLoop,4
+	db NLen+14
+	db NRest
+	db $39
+	db $39
+	db NRest
+	db $39
+	db $3B
+	db NRest
+	db $39
+	db $39
+	db NRest
+	db $3B
+	db $39
+	db SongLoopEnd
+	db SongLoop,3
+	db SegCall
+	dw Underwater_NoiseSub1
+	db SongLoopEnd
+	db SegCall
+	dw Underwater_NoiseSub2
+	db $F4
+	dw Underwater_NoiseLoop
+	db $FF
+Underwater_NoiseSub1:
+	db NLen+7
+	db NRest
+	db NRest
+	db $3A
+	db $3A
+	db NLen+14
+	db $3A
+	db NRest
+	db $3B
+	db $39
+	db SegEnd
+Underwater_NoiseSub2:
+	db NLen+14
+	db $3B
+	db $3A
+	db $3A
+	db NLen+42
+	db $3B
+	db SegEnd
+Underwater_DPCM:
+	db NLen+84
+	db NRest
+	db NRest
+Underwater_DPCMLoop:
+	db SongLoop,2
+	db SegCall
+	dw Underwater_DPCMSub1
+	db SegCall
+	dw Underwater_DPCMSub1
+	db SegCall
+	dw Underwater_DPCMSub2
+	db SegCall
+	dw Underwater_DPCMSub3
+	db SongLoopEnd
+	db SongLoop,2
+	db SegCall
+	dw Underwater_DPCMSub1
+	db SegCall
+	dw Underwater_DPCMSub1
+	db SegCall
+	dw Underwater_DPCMSub2
+	db SegCall
+	dw Underwater_DPCMSub4
+	db SegCall
+	dw Underwater_DPCMSub5
+	db SegCall
+	dw Underwater_DPCMSub6
+	db SegCall
+	dw Underwater_DPCMSub2
+	db SegCall
+	dw Underwater_DPCMSub5
+	db SegCall
+	dw Underwater_DPCMSub1
+	db SegCall
+	dw Underwater_DPCMSub1
+	db SegCall
+	dw Underwater_DPCMSub2
+	db SegCall
+	dw Underwater_DPCMSub4
+	db SegCall
+	dw Underwater_DPCMSub2
+	db SegCall
+	dw Underwater_DPCMSub7
+	db SegCall
+	dw Underwater_DPCMSub1
+	db SegCall
+	dw Underwater_DPCMSub1
+	db SongLoopEnd
+	db SongLoop,2
+	db SegCall
+	dw Underwater_DPCMSub8
+	db SegCall
+	dw Underwater_DPCMSub8
+	db SegCall
+	dw Underwater_DPCMSub9
+	db SegCall
+	dw Underwater_DPCMSub9
+	db SegCall
+	dw Underwater_DPCMSub10
+	db SegCall
+	dw Underwater_DPCMSub10
+	db SegCall
+	dw Underwater_DPCMSub11
+	db SegCall
+	dw Underwater_DPCMSub5
+	db SongLoopEnd
+	db SegCall
+	dw Underwater_DPCMSub1
+	db SegCall
+	dw Underwater_DPCMSub1
+	db SegCall
+	dw Underwater_DPCMSub2
+	db SegCall
+	dw Underwater_DPCMSub4
+	db SegCall
+	dw Underwater_DPCMSub2
+	db SegCall
+	dw Underwater_DPCMSub7
+	db SegCall
+	dw Underwater_DPCMSub1
+	db SegCall
+	dw Underwater_DPCMSub1
+	db $F4
+	dw Underwater_DPCMLoop
+	db $FF
+Underwater_DPCMSub1:
+	db NLen+14
+	db NRest
+	db NLen+3
+	db A4
+	db C5
+	db NLen+8
+	db NRest
+	db NLen+3
+	db A4
+	db C5
+	db NLen+8
+	db NRest
+	db SegEnd
+Underwater_DPCMSub2:
+	db NLen+14
+	db NRest
+	db NLen+3
+	db A#4
+	db D5
+	db NLen+8
+	db NRest
+	db NLen+3
+	db A#4
+	db D5
+	db NLen+8
+	db NRest
+	db SegEnd
+Underwater_DPCMSub3:
+	db NLen+14
+	db NRest
+	db NLen+3
+	db A#4
+	db C#5
+	db NLen+8
+	db NRest
+	db NLen+3
+	db A#4
+	db C#5
+	db NLen+8
+	db NRest
+	db SegEnd
+Underwater_DPCMSub4:
+	db NLen+14
+	db NRest
+	db NLen+3
+	db B4
+	db D5
+	db NLen+8
+	db NRest
+	db NLen+3
+	db B4
+	db D5
+	db NLen+8
+	db NRest
+	db SegEnd
+Underwater_DPCMSub5:
+	db NLen+14
+	db NRest
+	db NLen+3
+	db C5
+	db E5
+	db NLen+8
+	db NRest
+	db NLen+3
+	db C5
+	db E5
+	db NLen+8
+	db NRest
+	db SegEnd
+Underwater_DPCMSub6:
+	db NLen+14
+	db NRest
+	db NLen+3
+	db B4
+	db D#5
+	db NLen+8
+	db NRest
+	db NLen+3
+	db B4
+	db D#5
+	db NLen+8
+	db NRest
+	db SegEnd
+Underwater_DPCMSub7:
+	db NLen+14
+	db NRest
+	db NLen+3
+	db A#4
+	db C5
+	db NLen+8
+	db NRest
+	db NLen+3
+	db A#4
+	db C5
+	db NLen+8
+	db NRest
+	db SegEnd
+Underwater_DPCMSub8:
+	db NLen+14
+	db NRest
+	db NLen+3
+	db D5
+	db F5
+	db NLen+8
+	db NRest
+	db NLen+3
+	db D5
+	db F5
+	db NLen+8
+	db NRest
+	db SegEnd
+Underwater_DPCMSub9:
+	db NLen+14
+	db NRest
+	db NLen+3
+	db C5
+	db F5
+	db NLen+8
+	db NRest
+	db NLen+3
+	db C5
+	db F5
+	db NLen+8
+	db NRest
+	db SegEnd
+Underwater_DPCMSub10:
+	db NLen+14
+	db NRest
+	db NLen+3
+	db B4
+	db F5
+	db NLen+8
+	db NRest
+	db NLen+3
+	db B4
+	db F5
+	db NLen+8
+	db NRest
+	db SegEnd
+Underwater_DPCMSub11:
+	db NLen+14
+	db NRest
+	db NLen+3
+	db A#4
+	db F5
+	db NLen+8
+	db NRest
+	db NLen+3
+	db A#4
+	db F5
+	db NLen+8
+	db NRest
+	db SegEnd
 Underwater_Footer:
 	db NRest
-	.word Underwater_P1
+	dw Underwater_P1
 	db $01
-	.word Underwater_P2
+	dw Underwater_P2
 	db $02
-	.word Underwater_Tri
+	dw Underwater_Tri
 	db $03
-	.word Underwater_End
+	dw Underwater_Noise
 	db $04
-	.word Underwater_End
+	dw Underwater_DPCM
 	db $FF

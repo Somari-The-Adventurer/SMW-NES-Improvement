@@ -930,7 +930,7 @@ tbl5_8644:
 	dw ptr_AA7B
 	dw Obj_PowerupEatCheck
 	dw ptr10_864E
-	dw ptr_AD88
+	dw Obj_FlipKill
 ptr10_864E:
 	LDX $A4
 	LDA ObjectAction,X
@@ -1477,7 +1477,7 @@ tbl5_8A8B:
 	dw ptr_AA7B
 	dw Obj_PowerupEatCheck
 	dw ptr10_8A95
-	dw ptr_AD88
+	dw Obj_FlipKill
 ptr10_8A95:
 	JSR Obj_CapeHitCheck
 	JSR jmp_54_BC3E
@@ -1744,12 +1744,12 @@ tbl5_8CA5:
 	dw ptr_AA7B
 	dw Obj_PowerupEatCheck
 	dw ptr10_8CAF
-	dw ptr_AD88
+	dw Obj_FlipKill
 ptr10_8CAF:
 	JSR Obj_CapeHitCheck
 	JSR Obj_PlayerHitCheck
 	JSR Obj_KillOnSpinJump
-	LDA #sfx_EnemyHit2
+	LDA #sfx_EnemyHit1
 	STA SFXRegister
 	LDA #$01
 	JSR RewardPoints
@@ -2207,7 +2207,7 @@ bra5_902C:
 	LDA ObjFrameCounter
 	AND #$07
 	BNE bra5_9037
-	LDA #sfx_Cutter
+	LDA #sfx_Chainsaw
 	STA SFXRegister
 bra5_9037:
 	JSR sub5_92D7
@@ -2348,7 +2348,7 @@ bra5_913D:
 	LDA ObjFrameCounter
 	AND #$07
 	BNE bra5_9148
-	LDA #sfx_Cutter
+	LDA #sfx_Chainsaw
 	STA SFXRegister
 bra5_9148:
 	JSR sub5_82EC

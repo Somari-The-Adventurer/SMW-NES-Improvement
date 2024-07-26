@@ -50,7 +50,11 @@
 	SEC
 	SBC PlayerXPosDup
 	STA ObjectXDistance,X
+<<<<<<< HEAD
 	LDA a:PlayerAnimFrame,X
+=======
+	LDA a: PlayerAnimationFrame,X
+>>>>>>> upstream/master
 	db $00
 	db $00
 	db $00

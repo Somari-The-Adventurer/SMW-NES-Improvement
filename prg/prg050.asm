@@ -139,7 +139,7 @@ tbl6_811A:
 	dw ptr_AA7B
 	dw Obj_PowerupEatCheck
 	dw ptr6_8124
-	dw ptr_AD88
+	dw Obj_FlipKill
 ptr6_8124:
 	LDX $A4
 	LDA ObjectVariables,X
@@ -178,7 +178,7 @@ bra6_8151:
 	STA PlayerXSpeed
 	LDA #$01
 	JSR RewardPoints
-	LDA #sfx_EnemyHit2
+	LDA #sfx_EnemyHit1
 	STA SFXRegister
 	LDX $A4
 	LDA #$81
@@ -295,7 +295,7 @@ tbl6_8246:
 	dw ptr_AA7B
 	dw Obj_PowerupEatCheck
 	dw ptr6_8250
-	dw ptr_AD88
+	dw Obj_FlipKill
 ptr6_8250:
 	JSR sub6_825A
 	JSR Obj_PlayerHitCheck
@@ -1557,7 +1557,7 @@ ptr6_8ADB:
 	CMP #$30
 	BCC bra6_8B13
 	BNE bra6_8AEA
-	LDA #sfx_Thunder?
+	LDA #sfx_Explosion
 	STA SFXRegister
 	BNE bra6_8B13
 bra6_8AEA:
@@ -1749,7 +1749,7 @@ tbl6_8C48:
 	dw ptr_AA7B
 	dw Obj_PowerupEatCheck
 	dw ptr6_8C52
-	dw ptr_AD88
+	dw Obj_FlipKill
 ptr6_8C52:
 	LDA ObjectAction,X
 	CMP #$04
@@ -1777,7 +1777,7 @@ bra6_8C78:
 	ORA #$45
 	BNE bra6_8C9B
 bra6_8C86:
-	LDA #sfx_Feather
+	LDA #sfx_BossHit
 	STA SFXRegister
 	LDA #$06
 	STA ObjectAction,X
@@ -3181,7 +3181,7 @@ tbl6_934E:
 	dw ptr_AA7B
 	dw Obj_PowerupEatCheck
 	dw ptr6_9358
-	dw ptr_AD88
+	dw Obj_FlipKill
 ptr6_9358:
 	LDA ReznorsDefeated
 	BNE bra6_9363_RTS
@@ -3677,7 +3677,7 @@ tbl6_96EE:
 	dw ptr_AA7B
 	dw Obj_PowerupEatCheck
 	dw ptr6_96F8
-	dw ptr_AD88
+	dw Obj_FlipKill
 ptr6_96F8:
 	LDA ObjectAction,X
 	CMP #$02
@@ -3751,8 +3751,8 @@ bra6_9767:
 	STA PlayerMovement ;Make player move upwards
 	LDA #$04
 	STA PlayerAction ;Make player jump off
-	LDA #sfx_Feather
-	STA SFXRegister ;Play feather/hit sound
+	LDA #sfx_BossHit
+	STA SFXRegister ;Play boss hit sound
 	LDY #$04 ;Load "hit" action into Y register
 	LDA ObjectSlot,X
 	CMP #$72

@@ -1,51 +1,76 @@
 GameOver_P1:
-	.byte SongSpeed, 1
-	.byte Transpose, $11
-	.byte DutySet, $07
-	.byte PitchSet, $39
-	.byte VolSet, $11
-	.byte $D0
-	.byte D3
-	.byte $A8
-	.byte D3
-	.byte B2
-	.byte B2
-	.byte NLen+20
-	.byte D3
-	.byte E3
-	.byte $D0
-	.byte D4
-	.byte $FF
+	db SongSpeed, 1
+	db Transpose,0
+	db DutySet, $07
+	db PitchSet, 0
+	db VolSet, $43
+	db NLen+4
+	db NRest
+	db NLen+36
+	db A#3
+	db NLen+14
+	db NRest
+	db NLen+18
+	db C4
+	db NLen+36
+	db A#3
+	db G3
+	db A3
+	db NLen+108
+	db A4
+	db $FF
 GameOver_P2:
-	.byte Transpose, $11
-	.byte DutySet, $07
-	.byte PitchSet, $39
-	.byte VolSet, $11
-	.byte $85
-	.byte NRest
-	.byte $D0
-	.byte E3
-	.byte $A8
-	.byte E3
-	.byte D3
-	.byte D3
-	.byte NLen+20
-	.byte E3
-	.byte A3
-	.byte $D0
-	.byte D4
-	.byte $FF
+	db Transpose,0
+	db DutySet, $07
+	db PitchSet, 0
+	db VolSet, $43
+	db NLen+9
+	db NRest
+	db NLen+27
+	db A4
+	db F4
+	db NLen+13
+	db NRest
+	db NLen+36
+	db A4
+	db E4
+	db G4
+	db NLen+14
+	db NRest
+	db NLen+18
+	db D5
+	db NLen+72
+	db G5
+	db $FF
+GameOver_Tri:
+	db Transpose,0
+	db PitchSet, 0
+	db VolSet, $43
+	db NLenAdd,0
+	db NLen+63
+	db G3
+	db NLen+9
+	db NRest
+	db NLenAdd,0
+	db NLen+63
+	db C3
+	db NLen+9
+	db NRest
+	db NLenAdd,72
+	db NLen+72
+	db F3
+	db $FF
 GameOver_End:
 	db $FF
 GameOver_Footer:
 	db NRest
-	.word GameOver_P1
+	dw GameOver_P1
 	db $01
-	.word GameOver_P2
+	dw GameOver_P2
 	db $02
-	.word GameOver_End
+	dw GameOver_Tri
 	db $03
-	.word GameOver_End
+	dw GameOver_End
 	db $04
-	.word GameOver_End
+	dw GameOver_End
 	db $FF

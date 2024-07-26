@@ -2,7 +2,7 @@
 
 ;This is still a work in progress and is not recommended for use in hacks.
 
-;Assembles with parasyte's fork of ASM6.
+;Assembles with morskoyzmey's fork of ASM6.
 ;RGME_PATCH = 1
 
 ;----------------------------------------
@@ -299,26 +299,26 @@ CurrentTrackID = $070A
 CurrentTrackOffset = $070B
 CurrentTrackPointerOffset = $070C
 
-Pulse1Transpose = $070D
+MusicTranspose = $070D
 SongLoopCounter = $0710
 SongLoopPointer = $0715
 SongReturnPointer = $071F
 MusicPointer = $0729
 MusicSpeed = $0733
-NoteLengths = $0734
+MusicNoteLengths = $0734
 RemainingSongTicks = $0739
 NumSongTicks = $073A
-Pulse1Pitch = $0743
-Pulse1FinalPitch = $074D
-Pulse1VolumeEnv = $0757
-Pulse1VolumeDelay = $075C
-Pulse1VolumePointer = $0761
-Pulse1Duty = $076B
-Pulse1DutyDelay = $076D
-Pulse1DutyPointer = $076F
-Pulse1PitchSetting = $0773
-Pulse1PitchDelay = $0777
-Pulse1PitchPointer = $077B
+MusicPitch = $0743
+MusicFinalPitch = $074D
+MusicVolumeEnv = $0757
+MusicVolumeDelay = $075C
+MusicVolumePointer = $0761
+MusicDuty = $076B
+MusicDutyDelay = $076D
+MusicDutyPointer = $076F
+MusicPitchSetting = $0773
+MusicPitchDelay = $0777
+MusicPitchPointer = $077B
 
 MUS_RAM_AREA = $070D
 SFX_RAM_AREA = $0783
@@ -345,8 +345,7 @@ SFXPitchSetting = $0773 + SOUND_RAM_LENGTH
 SFXPitchDelay = $0777 + SOUND_RAM_LENGTH
 SFXPitchPointer = $077B + SOUND_RAM_LENGTH
 
-P1Flag = $07FC
-P2Flag = $07FD
+NoteLengthAddend = SFX_RAM_AREA + SOUND_RAM_LENGTH
 DPCMFlag = $07FE
 DPCMBackupOffset = $07FF
 

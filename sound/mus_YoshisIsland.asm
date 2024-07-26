@@ -3,7 +3,7 @@ YoshisIsland_P1Loop:
 	.byte SongSpeed, 1
 	.byte Transpose, $0C
 	.byte DutySet, $38
-	.byte PitchSet, $39
+	.byte PitchSet, $00
 	.byte VolSet, $40
 	.byte NLen+19
 	.byte E3
@@ -29,7 +29,7 @@ YoshisIsland_P1Loop:
 	.byte G3
 	.byte Transpose, $0C
 	.byte DutySet, $38
-	.byte PitchSet, $39
+	.byte PitchSet, $00
 	.byte VolSet, $40
 	.byte NLen+19
 	.byte F3
@@ -55,7 +55,7 @@ YoshisIsland_P1Loop:
 	.byte A3
 	.byte Transpose, $0C
 	.byte DutySet, $38
-	.byte PitchSet, $39
+	.byte PitchSet, $00
 	.byte VolSet, $40
 	.byte NLen+19
 	.byte E3
@@ -85,7 +85,7 @@ YoshisIsland_P2:
 YoshisIsland_P2Loop:
 	.byte Transpose, $0C
 	.byte DutySet, $38
-	.byte PitchSet, $39
+	.byte PitchSet, $00
 	.byte VolSet, $40
 	.byte NLen+19
 	.byte C3
@@ -111,7 +111,7 @@ YoshisIsland_P2Loop:
 	.byte E3
 	.byte Transpose, $0C
 	.byte DutySet, $38
-	.byte PitchSet, $39
+	.byte PitchSet, $00
 	.byte VolSet, $40
 	.byte NLen+19
 	.byte D3
@@ -137,7 +137,7 @@ YoshisIsland_P2Loop:
 	.byte F3
 	.byte Transpose, $0C
 	.byte DutySet, $38
-	.byte PitchSet, $39
+	.byte PitchSet, $00
 	.byte VolSet, $40
 	.byte NLen+19
 	.byte C3

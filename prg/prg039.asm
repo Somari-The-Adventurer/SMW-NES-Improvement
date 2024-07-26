@@ -259,7 +259,6 @@ ptr8_E1C9:
 	STA WarpNumber
 bra_E1F2_RTS:
 	RTS
-	RTS
 loc_E1F4:
 	LDA #$01
 	STA $95 ;Currently unknown flag
@@ -286,7 +285,7 @@ loc_E1F4:
 	LDA #$00
 	STA PlayerYSpeed
 bra_E224:
-	LDA PlayerXSpeed
+	JMP ThrottleSpeed
 	SEC
 	SBC #$01
 	CMP #$F8
@@ -6700,3 +6699,26 @@ bra_F4D9_RTS:
 	db $00
 	db $3D
 	db $01
+ThrottleSpeed:
+	LDA FreezeFlag
+	BNE @Zero
+	LDA zInputCurrentState
+	AND #dirLeft | dirRight
+	BEQ @Sub
+	LDA PlayerXSpeed
+	JSR ParseVelocityCap
+	BCC @Add
+	JSR GetVelocityCap
+	BNE @Set
+@Add:
+	ADC #$01
+	BCC @Set
+@Sub:
+	SEC
+	SBC #$01
+	BCS @Set
+@Zero:
+	LDA #$00
+@Set:
+	STA PlayerXSpeed ;Clear the player's X speed if it went negative
+	RTS

@@ -91,7 +91,7 @@ Overworld_P1Loop:
 	.word Overworld_P1Sub3
 	.byte Transpose, $18
 	.byte DutySet, $38
-	.byte PitchSet, $39
+	.byte PitchSet, $00
 	.byte VolSet, $11
 	.byte NLen+5
 	.byte SegCall
@@ -378,7 +378,7 @@ Overworld_P2Loop:
 	.byte F2
 	.byte Transpose, $18
 	.byte DutySet, $38
-	.byte PitchSet, $39
+	.byte PitchSet, $00
 	.byte VolSet, $11
 	.byte NLen+5
 	.byte SegCall
@@ -760,6 +760,110 @@ Overworld_TriSub:
 	.byte NLen+3
 	.byte NRest
 	.byte SegEnd
+Overworld_Noise:
+	.byte PitchSet, 0
+	.byte VolSet, 0
+	.byte NLen+108
+	.byte NRest
+Overworld_NoiseLoop:
+	.byte SongLoop,5
+	.byte SegCall
+	.word Overworld_NoiseSub1
+	.byte SegCall
+	.word Overworld_NoiseSub2
+	.byte SegCall
+	.word Overworld_NoiseSub2
+	.byte SegCall
+	.word Overworld_NoiseSub1
+	.byte SegCall
+	.word Overworld_NoiseSub2
+	.byte NLen+27
+	.byte $3B
+	.byte SongLoopEnd
+	.byte SongLoop,4
+	.byte SegCall
+	.word Overworld_NoiseSub1
+	.byte SegCall
+	.word Overworld_NoiseSub3
+	.byte SongLoopEnd
+	.byte SegCall
+	.word Overworld_NoiseSub1
+	.byte SegCall
+	.word Overworld_NoiseSub2
+	.byte SegCall
+	.word Overworld_NoiseSub2
+	.byte SegCall
+	.word Overworld_NoiseSub1
+	.byte SegCall
+	.word Overworld_NoiseSub2
+	.byte NLen+27
+	.byte $3B
+	.byte SegCall
+	.word Overworld_NoiseSub1
+	.byte SegCall
+	.word Overworld_NoiseSub2
+	.byte SegCall
+	.word Overworld_NoiseSub2
+	.byte SegCall
+	.word Overworld_NoiseSub1
+	.byte SegCall
+	.word Overworld_NoiseSub2
+	.byte NLen+6
+	.byte $3B
+	.byte NLen+7
+	.byte NRest
+	.byte $3B
+	.byte $3B
+	.byte SongLoop,4
+	.byte NLen+3
+	.byte $38
+	.byte $38
+	.byte NLen+7
+	.byte $38
+	.byte $38
+	.byte $38
+	.byte NLen+6
+	.byte $38
+	.byte NLen+7
+	.byte $38
+	.byte $3B
+	.byte NRest
+	.byte SegCall
+	.word Overworld_NoiseSub3
+	.byte SongLoopEnd
+	.byte SongJump
+	.word Overworld_NoiseLoop
+	.byte $FF
+Overworld_NoiseSub1:
+	.byte NLen+6
+	.byte $39
+	.byte NLen+7
+	.byte $38
+	.byte $39
+	.byte $3B
+	.byte NLen+13
+	.byte $3A
+	.byte NLen+14
+	.byte $3B
+	.byte SegEnd
+Overworld_NoiseSub2:
+	.byte NLen+6
+	.byte $3B
+	.byte NLen+7
+	.byte $3A
+	.byte $39
+	.byte NRest
+	.byte SegEnd
+Overworld_NoiseSub3:
+	.byte NLen+6
+	.byte $39
+	.byte NLen+7
+	.byte $3A
+	.byte NRest
+	.byte $39
+	.byte NLen+27
+	.byte $3A
+	.byte SegEnd
 Overworld_DPCM:
 	.byte NLen+108
 	.byte NRest
@@ -868,75 +972,107 @@ Overworld_DPCMLoop:
 	.byte SongLoopEnd
 	.byte SongLoop,2
 	.byte NLen+11
-	.byte D4
+	.byte D5
 	.byte NLen+2
 	.byte NRest
 	.byte NLen+12
-	.byte F4
+	.byte F5
 	.byte NLen+2
 	.byte NRest
 	.byte NLen+3
-	.byte D4
+	.byte D5
 	.byte NLen+6
 	.byte NRest
 	.byte NLen+3
-	.byte F4
+	.byte F5
 	.byte NLen+1
 	.byte NRest
 	.byte NLen+7
-	.byte G4
+	.byte G5
 	.byte NLen+2
 	.byte NRest
 	.byte NLen+3
-	.byte G#4
+	.byte G#5
 	.byte NLen+2
 	.byte NRest
 	.byte NLen+3
-	.byte A4
+	.byte A5
 	.byte NLen+6
 	.byte NRest
 	.byte NLen+3
-	.byte G#4
+	.byte G#5
 	.byte NLen+1
 	.byte NRest
 	.byte NLen+7
-	.byte G4
+	.byte G5
 	.byte NLen+2
 	.byte NRest
 	.byte NLen+3
-	.byte F#4
+	.byte F#5
 	.byte NLen+2
 	.byte NRest
 	.byte NLen+3
-	.byte A4
+	.byte A5
 	.byte NLen+6
 	.byte NRest
 	.byte NLen+3
-	.byte D4
+	.byte D5
 	.byte NLen+1
 	.byte NRest
 	.byte NLen+7
-	.byte D#4
+	.byte D#5
 	.byte NLen+2
 	.byte NRest
 	.byte NLen+3
-	.byte E4
+	.byte E5
 	.byte NLen+2
 	.byte NRest
 	.byte NLen+3
-	.byte F4
+	.byte F5
 	.byte NLen+10
 	.byte NRest
 	.byte NLen+12
-	.byte D4
+	.byte D5
 	.byte NLen+2
 	.byte NRest
 	.byte NLen+3
-	.byte F4
+	.byte F5
 	.byte NLen+6
 	.byte NRest
 	.byte NLen+3
-	.byte G4
+	.byte G5
+	.byte NLen+1
+	.byte NRest
+	.byte NLen+7
+	.byte G#5
+	.byte NLen+2
+	.byte NRest
+	.byte NLen+3
+	.byte A5
+	.byte NLen+2
+	.byte NRest
+	.byte NLen+3
+	.byte G#5
+	.byte NLen+6
+	.byte NRest
+	.byte NLen+3
+	.byte A5
+	.byte NLen+1
+	.byte NRest
+	.byte NLen+7
+	.byte F5
+	.byte NLen+2
+	.byte NRest
+	.byte NLen+3
+	.byte D5
+	.byte NLen+2
+	.byte NRest
+	.byte NLen+3
+	.byte C5
+	.byte NLen+6
+	.byte NRest
+	.byte NLen+3
+	.byte F5
 	.byte NLen+1
 	.byte NRest
 	.byte NLen+7
@@ -945,38 +1081,6 @@ Overworld_DPCMLoop:
 	.byte NRest
 	.byte NLen+3
 	.byte A4
-	.byte NLen+2
-	.byte NRest
-	.byte NLen+3
-	.byte G#4
-	.byte NLen+6
-	.byte NRest
-	.byte NLen+3
-	.byte A4
-	.byte NLen+1
-	.byte NRest
-	.byte NLen+7
-	.byte F4
-	.byte NLen+2
-	.byte NRest
-	.byte NLen+3
-	.byte D4
-	.byte NLen+2
-	.byte NRest
-	.byte NLen+3
-	.byte C4
-	.byte NLen+6
-	.byte NRest
-	.byte NLen+3
-	.byte F4
-	.byte NLen+1
-	.byte NRest
-	.byte NLen+7
-	.byte G#3
-	.byte NLen+2
-	.byte NRest
-	.byte NLen+3
-	.byte A3
 	.byte NLen+2
 	.byte NRest
 	.byte SongLoopEnd
@@ -1121,7 +1225,7 @@ Overworld_Footer:
 	db $02
 	.word Overworld_Tri
 	db $03
-	.word Overworld_End
+	.word Overworld_Noise
 	db $04
 	.word Overworld_DPCM
 	db $FF
